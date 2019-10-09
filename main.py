@@ -16,7 +16,7 @@ parser.add_argument('--no-cuda', action='store_true', default=True,
 parser.add_argument('--fastmode', action='store_true', default=True,
                     help='Validate during training pass.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=1,
+parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.01,
                     help='Initial learning rate.')
@@ -30,10 +30,12 @@ parser.add_argument('--pre_len', type=int, default=5,
                     help='the length of input data sequence.')
 parser.add_argument('--tar_len', type=int, default=3,
                     help='the length of output target sequence.')
-parser.add_argument('--batch_size', type=int, default=1,
+parser.add_argument('--batch_size', type=int, default=4,
                     help='the batch size.')
 parser.add_argument('--feq', type=int, default=30,
                     help='frequency to show the accuracy.')
+parser.add_argument('--mem_efficient', action='store_true', default=False,
+                    help='whether to use a membory efficient mode')
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -43,112 +45,102 @@ torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
-# Load data
-adj, features = load_data()
-adj = torch.tensor(adj).float()
-features_train, features_val, features_test = train_test_split(features, ratio=(0.5, 0.3, ))
-features_train, features_val, features_test = torch.tensor(features_train).float(), torch.tensor(features_val).float(), torch.tensor(features_test).float()
-print("featues_train shape: ", features_train.shape)
-args.num_nodes = features_train.shape[1]
-assert adj.shape[0] == features_train.shape[1]
-args.num_features = features_train.shape[2]
 
-def generate_targets(features, pre_len, tar_len):
-    """for the test of the demo, we use the data from the features as target
-    targets output is a (len(features)-pre_len-tar_len, tar_len, args.num_features)"""
-    len_feat = len(features)
-    output = torch.empty((len(features)-pre_len-tar_len, tar_len, args.num_nodes))
-    for i in range(len_feat-pre_len-tar_len):
-        output[i,:,:] = features[i+pre_len:i+pre_len+tar_len,:,0].squeeze()
-    return output
-
-
-# Model and optimizer
-# model = GCN(nfeat=num_features,
-#             nhid=args.hidden,
-#             nout=1,
-#             dropout=args.dropout,
-#             adj=adj)
-model = TGCN(nfeat=args.num_features,
-             nhid=args.num_nodes,
-             n_layers=3,
-             dropout=0.1,
-             adj=adj,
-             mode='GRU')
-criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(),
-                       lr=args.lr, weight_decay=args.weight_decay)
-
-if args.cuda:
-    model.cuda()
-    print("use cuda")
-
-
-def train(epoch):
+def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
     progress = ProgressMeter(
-        len(features_train),
+        int(len(features_train)/args.batch_size),
         [batch_time, data_time, losses],
-        prefix="Epoch: [{}]".format(epoch))
+        prefix=mode+"_Epoch: [{}]".format(epoch))
+
     t = time.time()
     model.train()
-    optimizer.zero_grad()
-    train_orders = torch.randperm(len(features_train)-args.pre_len-args.tar_len)
-    targets = generate_targets(features_train, args.pre_len, args.tar_len)
-    outputs = torch.empty(targets.shape)
-    for i, order in enumerate(train_orders):
-        target = targets[order]
-        output, hn = model(features_train[order:order+args.pre_len,:,:])
+    for i, (data, target) in enumerate(train_loader):
+        output, hn = model(data)
         output = output[-args.tar_len:].squeeze()
         loss_train = criterion(output, target)
         loss_train.backward()
         optimizer.step()
         optimizer.zero_grad()
-        outputs[order] = output
         loss = get_losses(target.view(-1).detach(), output.view(-1).detach(), method='rmse')
         losses.update(loss.item(), args.batch_size)
         if i % args.feq == 0:
             progress.display(i)
-    visulization(targets.view(-1).detach(), outputs.view(-1).detach())
 
 
-def test():
+def test(test_loader, model, criterion, epoch=0, mode='test'):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
     progress = ProgressMeter(
-        len(features_test),
+        int(len(features_test)/args.batch_size),
         [batch_time, data_time, losses],
-        prefix="Epoch: [{}]".format(epoch))
+        prefix=mode+"_Epoch: [{}]".format(epoch))
+
     t = time.time()
     model.eval()
-    optimizer.zero_grad()
-    test_orders = torch.randperm(len(features_test)-args.pre_len-args.tar_len)
-    targets = generate_targets(features_test, args.pre_len, args.tar_len)
-    outputs = torch.empty(targets.shape)
-    for i, order in enumerate(test_orders):
-        target = targets[order]
-        output, hn = model(features_test[order:order+args.pre_len,:,:])
+    for i, (data, target) in enumerate(test_loader):
+        output, hn = model(data)
         output = output[-args.tar_len:].squeeze()
         loss_test = criterion(output, target)
-        outputs[order] = output
-    loss = get_losses(targets.view(-1).detach(), outputs.view(-1).detach(), method='rmse')
-    losses.update(loss.item(), args.batch_size)
+        loss = get_losses(target.view(-1).detach(), output.view(-1).detach(), method='rmse')
+        losses.update(loss.item(), args.batch_size)
     progress.display(i)
-    visulization(targets.view(-1).detach(), outputs.view(-1).detach())
+
+
+def data_init(args):
+    adj, features = load_path()
+    adj = torch.tensor(adj).float()
+    features_train, features_val, features_test = train_test_split(features, ratio=(0.5, 0.3,))
+    features_train, features_val, features_test = torch.tensor(features_train).float(), torch.tensor(
+        features_val).float(), torch.tensor(features_test).float()
+    print("featues_train shape: ", features_train.shape)
+    args.num_nodes = features_train.shape[1]
+    assert adj.shape[0] == features_train.shape[1]
+    args.node_features = features_train.shape[2]
+
+    targets_train = generate_targets(features_train, args.pre_len, args.tar_len, args)
+    targets_val = generate_targets(features_val, args.pre_len, args.tar_len, args)
+    targets_test = generate_targets(features_val, args.pre_len, args.tar_len, args)
+    return adj, features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
 
+if __name__=="__main__":
+    # Load data
+    adj, features_train, features_val, features_test, targets_train, targets_val, targets_test = data_init(args)
+    train_loader, val_loader, test_loader = None, None, None
+    # Model and optimizer
+    model = TGCN(in_feat=args.node_features,
+                 out_feat=args.num_nodes,
+                 G_feat=1,
+                 n_layers=3,
+                 dropout=0.1,
+                 adj=adj,
+                 mode='GRU')
+    criterion = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters(),
+                           lr=args.lr, weight_decay=args.weight_decay)
+    if args.cuda:
+        model.cuda()
+        print("use cuda")
 
+    t_total = time.time()
+    if not args.mem_efficient:
+        train_loader = [_ for _ in data_loader(features_train, targets_train, args.batch_size, args)]
+        val_loader = [_ for _ in data_loader(features_val, targets_val, args.batch_size, args)]
+    for epoch in range(args.epochs):
+        if args.mem_efficient:
+            train_loader = data_loader(features_test, targets_test, args.batch_size, args)
+            val_loader = data_loader(features_val, targets_val, args.batch_size, args)
+        train(train_loader, model, criterion, optimizer, epoch)
+        test(val_loader, model, criterion, epoch, mode='val')
 
+    print("Optimization Finished!")
+    print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
 
-# Train model
-t_total = time.time()
-for epoch in range(args.epochs):
-    train(epoch)
-print("Optimization Finished!")
-print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
-test()
+    test_loader = data_loader(features_test, targets_test, args.batch_size, args)
+    test(test_loader, model, criterion)
 

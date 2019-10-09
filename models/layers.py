@@ -26,9 +26,9 @@ class GraphConvolution(Module):
         if self.bias is not None:
             self.bias.data.uniform_(-stdv, stdv)
 
-    def forward(self, input, adj):
-        support = torch.mm(input, self.weight)
-        output = torch.mm(adj, support)
+    def forward(self, inputs, adj):
+        """inputs shape: (batch_size, num_nodes, nodes_feature)"""
+        output = torch.stack([torch.mm(adj, torch.mm(input, self.weight)) for input in inputs])
         if self.bias is not None:
             return output + self.bias
         else:

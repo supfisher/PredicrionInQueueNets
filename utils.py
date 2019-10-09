@@ -16,7 +16,7 @@ def encode_onehot(labels):
     return labels_onehot
 
 
-def load_data(path="simul_data"):
+def load_path(path="simul_data"):
     """load dataset from path
     adj is a matrix, features is a dict with times as key, and [n_nodes, 3] for each value"""
     adj = pd.read_csv(os.path.join(path, 'adj.csv'))
@@ -35,6 +35,35 @@ def train_test_split(features, ratio=(0.5, 0.3, )):
     features_val = [features[i] for i in times[int(len(times)*ratio[0]):int(len(times)*(ratio[0]+ratio[1]))]]
     features_test = [features[i] for i in times[int(len(times)*(ratio[0]+ratio[1])):]]
     return features_train, features_val, features_test
+
+
+def generate_targets(features, pre_len, tar_len, args):
+    """for the test of the demo, we use the data from the features as target
+    targets output is a (len(features)-pre_len-tar_len, tar_len, args.num_nodes)"""
+    len_feat = len(features)
+    output = torch.empty((len(features)-pre_len-tar_len, tar_len, args.num_nodes))
+    for i in range(len_feat-pre_len-tar_len):
+        output[i,:,:] = features[i+pre_len:i+pre_len+tar_len,:,0].squeeze()
+    return output
+
+
+def data_loader(features, tragets, batch_size, args):
+    """features:(len(times), num_nodes, node_feature)
+    targets: (len(features)-pre_len-tar_len, tar_len, args.num_nodes)
+    retrun: (data, target)
+    data:(pre_len, batch_size, num_nodes, node_feature)
+    target:(tar_len, batch_size, args.num_nodes)"""
+    data_batch = torch.empty(args.pre_len, args.batch_size, args.num_nodes, args.node_features)
+    target_batch = torch.empty(args.tar_len, args.batch_size, args.num_nodes)
+
+    orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
+
+    for i in range(0, len(orders), batch_size):
+        orders_chunk = orders[i:min(i + batch_size, len(orders) - 1)]
+        for i, id in enumerate(orders_chunk):
+            data_batch[:,i,:,:] = features[id:id+args.pre_len,:,:]
+            target_batch[:,i,:] = tragets[id]
+        yield data_batch, target_batch
 
 
 class AverageMeter(object):
