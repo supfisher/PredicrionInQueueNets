@@ -5,7 +5,6 @@ import argparse
 import numpy as np
 
 import torch
-import torch.nn.functional as F
 import torch.optim as optim
 
 
@@ -18,23 +17,23 @@ parser.add_argument('--fastmode', action='store_true', default=True,
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=0.01,
+parser.add_argument('--lr', type=float, default=1,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
 parser.add_argument('--hidden', type=int, default=2,
                     help='Number of hidden units.')
-parser.add_argument('--dropout', type=float, default=0.5,
+parser.add_argument('--dropout', type=float, default=0,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--pre_len', type=int, default=5,
+parser.add_argument('--pre_len', type=int, default=15,
                     help='the length of input data sequence.')
-parser.add_argument('--tar_len', type=int, default=3,
+parser.add_argument('--tar_len', type=int, default=1,
                     help='the length of output target sequence.')
 parser.add_argument('--batch_size', type=int, default=4,
                     help='the batch size.')
 parser.add_argument('--feq', type=int, default=30,
                     help='frequency to show the accuracy.')
-parser.add_argument('--mem_efficient', action='store_true', default=False,
+parser.add_argument('--mem_efficient', action='store_true', default=True,
                     help='whether to use a membory efficient mode')
 
 args = parser.parse_args()
@@ -50,9 +49,10 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
+    train_losses = AverageMeter('Training Loss', ':.4e')
     progress = ProgressMeter(
-        int(len(features_train)/args.batch_size),
-        [batch_time, data_time, losses],
+        100,
+        [batch_time, data_time, losses, train_losses],
         prefix=mode+"_Epoch: [{}]".format(epoch))
 
     t = time.time()
@@ -60,12 +60,14 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     for i, (data, target) in enumerate(train_loader):
         output, hn = model(data)
         output = output[-args.tar_len:].squeeze()
-        loss_train = criterion(output, target)
+        loss_train = criterion(output.reshape(args.batch_size,-1), target.reshape(args.batch_size,-1))
+        optimizer.zero_grad()
         loss_train.backward()
         optimizer.step()
-        optimizer.zero_grad()
+
         loss = get_losses(target.view(-1).detach(), output.view(-1).detach(), method='rmse')
-        losses.update(loss.item(), args.batch_size)
+        losses.update(loss, 1)
+        train_losses.update(loss_train.item(), args.batch_size)
         if i % args.feq == 0:
             progress.display(i)
 
@@ -75,7 +77,7 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
     progress = ProgressMeter(
-        int(len(features_test)/args.batch_size),
+        100,
         [batch_time, data_time, losses],
         prefix=mode+"_Epoch: [{}]".format(epoch))
 
@@ -125,9 +127,8 @@ if __name__=="__main__":
                  dropout=0.1,
                  adj=adj,
                  mode='GRU')
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(),
-                           lr=args.lr, weight_decay=args.weight_decay)
+    criterion = nn.KLDivLoss()
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.cuda:
         model.cuda()
         print("use cuda")
