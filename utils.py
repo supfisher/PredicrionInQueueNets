@@ -23,38 +23,42 @@ def load_path(path="simul_data"):
     adj = np.array(adj.values)
     with open(os.path.join(path, 'features.pkl'), 'rb') as f:
         features = pickle.load(f)
-    return adj, features
+    with open(os.path.join(path, 'targets.pkl'), 'rb') as f:
+        targets = pickle.load(f)
+    return adj, features, targets
 
 
-def train_test_split(features, ratio=(0.5, 0.3, )):
-    """split the loaded features data into train dataset and test dataset
-    train is """
+def train_test_split(features, targets, ratio=(0.5, 0.3, )):
+    """split the loaded features data into train dataset and test dataset"""
     assert sum(ratio) <= 1
     times = list(features.keys())
     features_train = [features[i] for i in times[0: int(len(times)*ratio[0])]]
     features_val = [features[i] for i in times[int(len(times)*ratio[0]):int(len(times)*(ratio[0]+ratio[1]))]]
     features_test = [features[i] for i in times[int(len(times)*(ratio[0]+ratio[1])):]]
-    return features_train, features_val, features_test
+
+    targets_train = [targets[i] for i in times[0: int(len(times) * ratio[0])]]
+    targets_val = [targets[i] for i in times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
+    targets_test = [targets[i] for i in times[int(len(times) * (ratio[0] + ratio[1])):]]
+    return features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
-def generate_targets(features, pre_len, tar_len, args):
-    """for the test of the demo, we use the data from the features as target
-    targets output is a (len(features)-pre_len-tar_len, tar_len, args.num_nodes)"""
-    len_feat = len(features)
-    output = torch.empty((len(features)-pre_len-tar_len, tar_len, args.num_nodes))
+def generate_targets(targets, pre_len, tar_len, args):
+    """targets output is a (len(targets)-pre_len-tar_len, tar_len, target_features)"""
+    len_feat = len(targets)
+    output = torch.empty((len(targets)-pre_len-tar_len, tar_len, targets.shape[-1]))
     for i in range(len_feat-pre_len-tar_len):
-        output[i,:,:] = features[i+pre_len:i+pre_len+tar_len,:,0].squeeze()
+        output[i, :] = targets[i+pre_len-1:i+pre_len+tar_len-1, :]
     return output
 
 
-def data_loader(features, tragets, batch_size, args):
+def data_loader(features, targets, batch_size, args):
     """features:(len(times), num_nodes, node_feature)
-    targets: (len(features)-pre_len-tar_len, tar_len, args.num_nodes)
+    targets: (len(features)-pre_len-tar_len, tar_len, target_features)
     retrun: (data, target)
     data:(pre_len, batch_size, num_nodes, node_feature)
-    target:(tar_len, batch_size, args.num_nodes)"""
+    target:(tar_len, batch_size, target_features)"""
     data_batch = torch.empty(args.pre_len, args.batch_size, args.num_nodes, args.node_features)
-    target_batch = torch.empty(args.tar_len, args.batch_size, args.num_nodes)
+    target_batch = torch.empty(args.tar_len, args.batch_size, targets.shape[-1])
 
     orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
 
@@ -62,7 +66,7 @@ def data_loader(features, tragets, batch_size, args):
         orders_chunk = orders[i:min(i + batch_size, len(orders) - 1)]
         for i, id in enumerate(orders_chunk):
             data_batch[:,i,:,:] = features[id:id+args.pre_len,:,:]
-            target_batch[:,i,:] = tragets[id]
+            target_batch[:,i,:] = targets[id]
         yield data_batch, target_batch
 
 
@@ -118,7 +122,12 @@ def mae(y_pre, y_true):
 
 
 def mare(y_pre, y_true):
-    inputs = [(i-j)/j for i, j in zip(y_pre, y_true)]
+    inputs = []
+    for i,j in zip(y_pre, y_true):
+        if j != 0:
+            inputs.append((i-j)/j)
+        else:
+            inputs.append((i - 0) / 1)
     return np.linalg.norm(inputs, ord=1)/len(inputs)
 
 

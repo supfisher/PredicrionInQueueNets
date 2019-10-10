@@ -26,7 +26,7 @@ def binary_search(arry, value):
 
 def load_data(path):
     data = pd.read_csv(path)
-    print(data.head(5))
+    print(data.values[0:5])
     return data.values
 
 
@@ -118,7 +118,7 @@ def slide_data(data, num_nodes, wind_step=None, time_step=None, sample_rate=0.01
      and generate features from the data[current-slide: current],
      features:[# arrival events in the period, # departure events in the period, # arrival events but departure in the period]
      the features shape is (len(data)-step, num_node, 3)"""
-    arv_array = data[:, Index.arrival.value]
+    arv_array = np.array(data[:, Index.arrival.value])
     depar_array = np.array(data[:, Index.departure.value])
 
     min_arv_time = min(arv_array)
@@ -132,7 +132,8 @@ def slide_data(data, num_nodes, wind_step=None, time_step=None, sample_rate=0.01
 
     features = np.zeros((len(arv_array) - start_index, num_nodes, 3))
     features_dict = {}
-
+    targets = np.zeros((len(arv_array) - start_index, 3)) ## we record the (q_id, service_time, response time)
+    targets_dic = {}
     for i in range(start_index, len(arv_array)):
         "to save the computation memory, once we get a piece of event logs, we tranfer it to features"
         arv_data = {}
@@ -146,7 +147,7 @@ def slide_data(data, num_nodes, wind_step=None, time_step=None, sample_rate=0.01
             s_index = i - start_index
             s_time = arv_array[s_index]
 
-        arv_indexes = list(range(s_index, i))
+        arv_indexes = list(range(s_index, i+1))
         arv_data[current_time] = data[arv_indexes, :]
 
         current_depart_indexes = np.where(depar_array <= current_time)[0].tolist()
@@ -162,7 +163,12 @@ def slide_data(data, num_nodes, wind_step=None, time_step=None, sample_rate=0.01
 
         features[i - start_index, :, :] += features_tmp[0, :, :]
         features_dict[current_time] = features_dict_tmp[current_time]
-    return features, features_dict
+
+        targets[i - start_index, 0] = data[i, Index.q_id.value]
+        targets[i - start_index, 1] = data[i, Index.departure.value] - data[i, Index.service.value]
+        targets[i - start_index, 2] = data[i, Index.departure.value] - data[i, Index.arrival.value]
+        targets_dic[current_time] = targets[i - start_index]
+    return features, features_dict, targets, targets_dic
 
 
 
@@ -239,12 +245,13 @@ if __name__=='__main__':
     if weight != 1:
         num_nodes = int((math.pow(weight, height+1)-1)/(weight-1))
     data = load_data('weight_'+str(weight)+'_height_'+str(height)+'_agent_queue.csv')
-    features, features_dict = slide_data(data, num_nodes, wind_step=window_size, time_step=None, sample_rate=0.01)
+    features, features_dict, targets, targets_dic = slide_data(data, num_nodes, wind_step=window_size, time_step=None, sample_rate=0.01)
     print(features.shape)
     print(features[-10:-1])
     adj = load_data('weight_' + str(weight) + '_height_' + str(height) + '_adj.csv')
     adj += adj.T
     data2pickle(features_dict, './features.pkl')
     data2csv(adj, './adj.csv')
+    data2pickle(targets_dic, './targets.pkl')
 
 

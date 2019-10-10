@@ -1,83 +1,85 @@
-import numpy as np
-from sklearn.linear_model import LinearRegression as LR
+import argparse
+from utils import *
 import xgboost as xgb
 from xgboost import plot_importance
-import pandas as pd
-from sklearn.svm import SVR
-from sklearn.model_selection import train_test_split
 from matplotlib import pyplot as plt
-import math
-
-def rmse(y_pre, y_true):
-    inputs = y_pre - y_true
-    return np.linalg.norm(inputs, ord=2)/math.sqrt(len(inputs))
-
-def mae(y_pre, y_true):
-    inputs = y_pre - y_true
-    return np.linalg.norm(inputs, ord=1)/len(inputs)
-
-def mare(y_pre, y_true):
-    inputs = [(i-j)/j for i, j in zip(y_pre, y_true)]
-    return np.linalg.norm(inputs, ord=1)/len(inputs)
+import numpy as np
+from scipy import sparse
+from sklearn.metrics import make_scorer
 
 
-def preprocess_data(data, rate=0.8, seq_len=5, pre_len=3):
-    data1 = list(data.values)
-    time_len = len(data1)
-    train_size = int(time_len * rate)
-    train_data = data1[0:train_size]
-    test_data = data1[train_size:time_len]
-
-    trainX, trainY, testX, testY = [], [], [], []
-    for i in range(len(train_data) - seq_len - pre_len):
-        a = train_data[i: i + seq_len + pre_len]
-        trainX.append(a[0: seq_len])
-        trainY.append(a[seq_len: seq_len + pre_len])
-    for i in range(len(test_data) - seq_len - pre_len):
-        b = test_data[i: i + seq_len + pre_len]
-        testX.append(b[0: seq_len])
-        testY.append(b[seq_len: seq_len + pre_len])
-    return trainX, trainY, testX, testY
+parser = argparse.ArgumentParser()
+parser.add_argument('--seed', type=int, default=42, help='Random seed.')
+parser.add_argument('--epochs', type=int, default=20,
+                    help='Number of epochs to train.')
+parser.add_argument('--pre_len', type=int, default=5,
+                    help='the length of input data sequence.')
+parser.add_argument('--tar_len', type=int, default=3,
+                    help='the length of output target sequence.')
 
 
-def main(path):
-    data = pd.read_csv(path)
-    seq_len = 5
-    pre_len = 1
-    a_X, a_Y, t_X, t_Y = preprocess_data(data, rate=0.8, seq_len=5, pre_len=1)
-    a_X = np.array(a_X)
-    a_X = np.reshape(a_X, [-1, seq_len])
-    a_Y = np.array(a_Y)
-    a_Y = np.reshape(a_Y, [-1, pre_len])
-    a_Y = np.mean(a_Y, axis=1)
-    t_X = np.array(t_X)
-    t_X = np.reshape(t_X, [-1, seq_len])
-    t_Y = np.array(t_Y)
-    t_Y = np.reshape(t_Y, [-1, pre_len])
-    model = xgb.XGBRegressor(max_depth=5, learning_rate=0.1, n_estimators=160, silent=True, objective='reg:gamma')
-    svr_model = SVR(kernel='linear')
-    svr = svr_model.fit(a_X, a_Y)
-    print("svr: ", svr.score(a_X, a_Y))
-    reg = model.fit(a_X, a_Y)
-    print("reg: ", reg.score(a_X, a_Y))
-    # 对测试集进行预测
-    y_pre = model.predict(t_X)
-    pre = svr_model.predict(t_X)
-    print("RMSE: ", rmse(y_pre, t_Y))
-    print("MAE: ", mae(y_pre, t_Y))
-    print("MARE: ", mare(y_pre, t_Y))
-    plt.plot(y_pre, 'r')
-    plt.plot(t_Y, 'b')
-    plt.show()
-    plt.plot(model.predict(a_X), 'r')
-    plt.plot(a_Y, 'b')
-    plt.show()
-    # 显示重要特征
-    plot_importance(model)
-    plt.show()
+def preprocess_data(features, targets, args):
+    """features:(len(times), num_nodes, node_feature)
+    targets: (len(times), target_feature)
+    retrun: (data_vev, target_vec)
+    data_vev:(features.shape[0]-pre_len-tar_len, num_nodes*node_feature)
+    target_vec:(tar_len, node_feature, data_vec.shape[0])
+    for simplicity we use node_features[0] as the target
+    """
+    data_vec = np.empty([features.shape[0] - args.pre_len - args.tar_len, args.pre_len*features.shape[1]*features.shape[2]])
+    target_vec = np.empty([args.tar_len, targets.shape[-1], data_vec.shape[0]])
+
+    orders = torch.randperm(features.shape[0] - args.pre_len - args.tar_len)
+    for id in orders:
+        data_vec[id] = features[id:id+args.pre_len].reshape(-1)
+        target_vec[:, :, id] = targets[id+args.pre_len-1:id+args.pre_len+args.tar_len-1, :]
+
+    return sparse.csr_matrix(data_vec), target_vec
+
+
+def data_init(args):
+    adj, features, targets = load_path()
+    features_train, features_val, features_test, targets_train, targets_val, targets_test \
+        = train_test_split(features, targets, ratio=(0.5, 0.3,))
+    features_train, features_val, features_test = np.array(features_train), np.array(
+        features_val), np.array(features_test)
+
+    targets_train, targets_val, targets_test = np.array(targets_train), np.array(
+        targets_val), np.array(targets_test)
+    print("featues_train shape: ", features_train.shape)
+    args.num_nodes = features_train.shape[1]
+    assert adj.shape[0] == features_train.shape[1]
+    args.node_features = features_train.shape[2]
+
+    data_train, targets_train = preprocess_data(features_train, targets_train, args)
+    data_val, targets_val = preprocess_data(features_val, targets_val, args)
+    data_test, targets_test = preprocess_data(features_test, targets_test, args)
+    return adj, data_train, data_val, data_test, targets_train, targets_val, targets_test
+
+
+def main(args):
+    adj, data_train, data_val, data_test, targets_train, targets_val, targets_test = data_init(args)
+    model = xgb.XGBRegressor(max_depth=5, learning_rate=0.1, n_estimators=50, silent=True, objective='reg:gamma')
+    pres_test = np.zeros_like(targets_test)
+    for tar_len, (target_train, target_test) in enumerate(zip(targets_train, targets_test)):
+        for node, (t_train, t_test) in enumerate(zip(target_train, target_test)):
+            model.fit(data_train, t_train)
+            # 对测试集进行预测
+            pre_test = model.predict(data_test)
+            pres_test[tar_len, node, :] = pre_test
+
+            print(pre_test)
+            print("RMSE: ", rmse(pre_test.reshape(-1), t_test.reshape(-1)))
+            print("MAE: ", mae(pre_test.reshape(-1), t_test.reshape(-1)))
+            print("MARE: ", mare(pre_test.reshape(-1), t_test.reshape(-1)))
+    print(sum(abs(pres_test.reshape(-1)-targets_test.reshape(-1))))
+    print("RMSE: ", rmse(pres_test.reshape(-1), targets_test.reshape(-1)))
+    print("MAE: ", mae(pres_test.reshape(-1), targets_test.reshape(-1)))
+    print("MARE: ", mare(pres_test.reshape(-1), targets_test.reshape(-1)))
+
 
 
 if __name__ == "__main__":
-    path = 'weight_3_height_2_agent_queue.csv'
-    main(path)
+    args = parser.parse_args()
+    main(args)
 

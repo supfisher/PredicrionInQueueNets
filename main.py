@@ -91,19 +91,24 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
 
 
 def data_init(args):
-    adj, features = load_path()
+    adj, features, targets = load_path()
     adj = torch.tensor(adj).float()
-    features_train, features_val, features_test = train_test_split(features, ratio=(0.5, 0.3,))
+    features_train, features_val, features_test, targets_train, targets_val, targets_test\
+        = train_test_split(features, targets, ratio=(0.5, 0.3,))
     features_train, features_val, features_test = torch.tensor(features_train).float(), torch.tensor(
         features_val).float(), torch.tensor(features_test).float()
+    targets_train, targets_val, targets_test = torch.tensor(targets_train).float(), torch.tensor(
+        targets_val).float(), torch.tensor(targets_test).float()
     print("featues_train shape: ", features_train.shape)
     args.num_nodes = features_train.shape[1]
     assert adj.shape[0] == features_train.shape[1]
     args.node_features = features_train.shape[2]
 
-    targets_train = generate_targets(features_train, args.pre_len, args.tar_len, args)
-    targets_val = generate_targets(features_val, args.pre_len, args.tar_len, args)
-    targets_test = generate_targets(features_val, args.pre_len, args.tar_len, args)
+    targets_train = generate_targets(targets_train, args.pre_len, args.tar_len, args)
+    targets_val = generate_targets(targets_val, args.pre_len, args.tar_len, args)
+    targets_test = generate_targets(targets_test, args.pre_len, args.tar_len, args)
+
+
     return adj, features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
@@ -114,7 +119,7 @@ if __name__=="__main__":
     train_loader, val_loader, test_loader = None, None, None
     # Model and optimizer
     model = TGCN(in_feat=args.node_features,
-                 out_feat=args.num_nodes,
+                 out_feat=targets_train.shape[-1],
                  G_feat=1,
                  n_layers=3,
                  dropout=0.1,
