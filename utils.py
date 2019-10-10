@@ -23,15 +23,16 @@ def train_test_split(features, targets, ratio=(0.5, 0.3, )):
     """split the loaded features data into train dataset and test dataset
     features shape: key: times, values: (num_nodes, node_feature)
     target feature: key: times, values: (target_feature)"""
+    Id={'q_id': 0, 'service_time': 1, 'response_time': 2}
     assert sum(ratio) <= 1
     times = sorted(list(features.keys()))
     features_train = [features[i] for i in times[0: int(len(times)*ratio[0])]]
     features_val = [features[i] for i in times[int(len(times)*ratio[0]):int(len(times)*(ratio[0]+ratio[1]))]]
     features_test = [features[i] for i in times[int(len(times)*(ratio[0]+ratio[1])):]]
 
-    targets_train = [targets[i][1:] for i in times[0: int(len(times) * ratio[0])]]
-    targets_val = [targets[i][1:] for i in times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
-    targets_test = [targets[i][1:] for i in times[int(len(times) * (ratio[0] + ratio[1])):]]
+    targets_train = [targets[i][Id['service_time'],] for i in times[0: int(len(times) * ratio[0])]]
+    targets_val = [targets[i][Id['service_time'],] for i in times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
+    targets_test = [targets[i][Id['service_time'],] for i in times[int(len(times) * (ratio[0] + ratio[1])):]]
     return features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
@@ -40,7 +41,7 @@ def generate_targets(targets, pre_len, tar_len, args):
     len_feat = len(targets)
     output = torch.empty((len(targets)-pre_len-tar_len, tar_len, targets.shape[-1]))
     for i in range(len_feat-pre_len-tar_len):
-        output[i, :] = targets[i+pre_len-1:i+pre_len+tar_len-1, :]
+        output[i] = targets[i+pre_len-1:i+pre_len+tar_len-1]
     return output
 
 
@@ -60,7 +61,7 @@ def data_loader(features, targets, batch_size, args):
         for j, id in enumerate(orders_chunk):
             data_batch[:,j,:,:] = features[id:id+args.pre_len,:,:]
             target_batch[:,j,:] = targets[id]
-        yield (data_batch, target_batch)
+        yield data_batch, target_batch
 
 
 class AverageMeter(object):
@@ -135,7 +136,6 @@ def get_losses(target, prediction, method='rmse'):
 
 def visulization(target, prediction):
     import matplotlib.pyplot as plt
-    index = torch.nonzero(target)
-    plt.plot(target[index], 'r')
-    plt.plot(prediction[index], 'b')
+    plt.plot(target, 'r')
+    plt.plot(prediction, 'b')
     plt.show()
