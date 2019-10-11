@@ -253,5 +253,5 @@ if __name__=='__main__':
     data2pickle(features_dict, './features.pkl')
     data2csv(adj, './adj.csv')
     data2pickle(targets_dic, './targets.pkl')
-
+    data2csv(targets, './targets.csv')
 

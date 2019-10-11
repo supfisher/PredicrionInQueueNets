@@ -17,7 +17,7 @@ parser.add_argument('--fastmode', action='store_true', default=True,
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=.05,
+parser.add_argument('--lr', type=float, default=5,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
@@ -111,10 +111,15 @@ def data_init(args):
         features_val).float(), torch.tensor(features_test).float()
     targets_train, targets_val, targets_test = torch.tensor(targets_train).float(), torch.tensor(
         targets_val).float(), torch.tensor(targets_test).float()
+
     if len(targets_train.shape) == 1:
         targets_train = targets_train.unsqueeze(1)
         targets_val = targets_val.unsqueeze(1)
         targets_test = targets_test.unsqueeze(1)
+
+    targets_train,_,_ = nomalization(targets_train)
+    targets_val,_,_ = nomalization(targets_val)
+    targets_test,_,_ = nomalization(targets_test)
     print("featues_train shape: ", features_train.shape)
     print("targets_train shape: ", targets_train.shape)
     args.num_nodes = features_train.shape[1]

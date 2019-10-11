@@ -36,6 +36,13 @@ def train_test_split(features, targets, ratio=(0.5, 0.3, )):
     return features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
+def nomalization(targets):
+    """the shape of targets: (len(times), target_feature)"""
+    mu = torch.mean(targets, dim=0)
+    std = torch.std(targets, dim=0)
+    targets = (targets-mu)/std
+    return targets, mu, std
+
 def generate_targets(targets, pre_len, tar_len, args):
     """targets output is a (len(targets)-pre_len-tar_len, tar_len, target_features)"""
     len_feat = len(targets)
