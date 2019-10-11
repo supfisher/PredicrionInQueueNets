@@ -58,18 +58,17 @@ def data_loader(features, targets, batch_size, args):
     retrun: (data, target)
     data_batch:(pre_len, batch_size, num_nodes, node_feature)
     target_batch:(tar_len, batch_size, target_features)"""
-    data_batch = torch.empty(args.pre_len, args.batch_size, args.num_nodes, args.node_features)
-    target_batch = torch.empty(args.tar_len, args.batch_size, targets.shape[-1])
-
-    orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
-
+    orders = torch.tensor(range(len(features) - args.pre_len - args.tar_len))
+    if args.shuffle:
+        orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
     for i in range(0, len(orders), batch_size):
+        data_batch = torch.empty(args.pre_len, args.batch_size, args.num_nodes, args.node_features)
+        target_batch = torch.empty(args.tar_len, args.batch_size, targets.shape[-1])
         orders_chunk = orders[i:min(i + batch_size, len(orders) - 1)]
         for j, id in enumerate(orders_chunk):
             data_batch[:,j,:,:] = features[id:id+args.pre_len,:,:]
             target_batch[:,j,:] = targets[id]
         yield data_batch, target_batch
-
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""

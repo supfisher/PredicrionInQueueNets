@@ -12,18 +12,18 @@ import torch.optim as optim
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=True,
                     help='Disables CUDA training.')
-parser.add_argument('--fastmode', action='store_true', default=True,
-                    help='Validate during training pass.')
+parser.add_argument('--shuffle', action='store_true', default=False,
+                    help='Whether to shuffle the dataset.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=5,
+parser.add_argument('--lr', type=float, default=.1,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
 parser.add_argument('--hidden', type=int, default=2,
                     help='Number of hidden units.')
-parser.add_argument('--dropout', type=float, default=0.3,
+parser.add_argument('--dropout', type=float, default=0.2,
                     help='Dropout rate (1 - keep probability).')
 parser.add_argument('--pre_len', type=int, default=15,
                     help='the length of input data sequence.')
@@ -67,8 +67,6 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
         losses.update(loss, 1)
         train_losses.update(loss_train.item(), args.batch_size)
         if i % args.feq == 0:
-            print("target: ", target.view(-1).detach())
-            print("prediction: ", output.view(-1).detach())
             progress.display(i)
 
 
@@ -120,6 +118,7 @@ def data_init(args):
     targets_train,_,_ = nomalization(targets_train)
     targets_val,_,_ = nomalization(targets_val)
     targets_test,_,_ = nomalization(targets_test)
+
     print("featues_train shape: ", features_train.shape)
     print("targets_train shape: ", targets_train.shape)
     args.num_nodes = features_train.shape[1]
@@ -130,25 +129,33 @@ def data_init(args):
     targets_val = generate_targets(targets_val, args.pre_len, args.tar_len, args)
     targets_test = generate_targets(targets_test, args.pre_len, args.tar_len, args)
 
-
     return adj, features_train, features_val, features_test, targets_train, targets_val, targets_test
 
+def debug(features_test, targets_test):
+    """debug"""
+    test_loader_debug = data_loader(features_test, targets_test, args.batch_size, args)
+    targets_test = []
+    for i, (data_batch, target_batch) in enumerate(test_loader_debug):
+        targets_test.extend(target_batch.view(-1))
+    visulization(targets_test, [])
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     # Load data
     adj, features_train, features_val, features_test, targets_train, targets_val, targets_test = data_init(args)
     train_loader, val_loader, test_loader = None, None, None
+    debug(features_test, targets_test)
+    debug(features_val, targets_val)
     # Model and optimizer
     model = TGCN(in_feat=args.node_features,
                  out_feat=targets_train.shape[-1],
                  G_feat=1,
                  n_layers=3,
-                 dropout=0.1,
+                 dropout=args.dropout,
                  adj=adj,
                  mode='GRU')
-    criterion = nn.KLDivLoss()
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    criterion = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.cuda:
         model.cuda()
         print("use cuda")
