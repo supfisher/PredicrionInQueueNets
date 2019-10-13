@@ -237,9 +237,9 @@ def data2pickle(data_dic, path):
 
 
 if __name__=='__main__':
-    weight = 3
-    height = 3
-    window_size = 15
+    weight = 1
+    height = 5
+    window_size = 500
     sample_rate = 0.1
     num_nodes = height
     if weight != 1:

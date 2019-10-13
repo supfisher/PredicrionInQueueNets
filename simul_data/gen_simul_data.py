@@ -98,7 +98,7 @@ def graph2queue(adja_list, edge_list, args):
     }
     for i in range(3, args.height+2):
         q_args[i] = {'num_servers': 3,
-                        'service_f': lambda t: t + np.random.exponential(45*i),
+                        'service_f': lambda t: t + np.random.exponential(15),
                         'AgentFactory': qt.GreedyAgent}
     print("q_args: ", q_args)
     g = qt.adjacency2graph(adjacency=adja_list, edge_type=edge_list)
@@ -196,8 +196,8 @@ def queue_data_dict2mat(data_dic):
 
 if __name__=='__main__':
     args = parser.parse_args()
-    weight = 3
-    height = 3
+    weight = 1
+    height = 5
     entry = (0, 1)
     args.weight = weight
     args.height = height
@@ -206,7 +206,7 @@ if __name__=='__main__':
     print(edge_list)
     qn = graph2queue(adja_list, edge_list, args)
     queue_show(qn, args)
-    data = queue_simu(qn, args, use_queue=True, t=2000)
+    data = queue_simu(qn, args, use_queue=True, t=200000)
 
     data = simplfy_data(data, use_queue=True)
 
