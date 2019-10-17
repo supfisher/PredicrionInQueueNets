@@ -5,6 +5,7 @@ import argparse
 import numpy as np
 
 import torch
+import torch.nn as nn
 import torch.optim as optim
 
 
@@ -17,7 +18,7 @@ parser.add_argument('--shuffle', action='store_true', default=False,
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=2,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=.01,
+parser.add_argument('--lr', type=float, default=1,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
@@ -25,7 +26,7 @@ parser.add_argument('--hidden', type=int, default=2,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.2,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--pre_len', type=int, default=30,
+parser.add_argument('--pre_len', type=int, default=50,
                     help='the length of input data sequence.')
 parser.add_argument('--tar_len', type=int, default=1,
                     help='the length of output target sequence.')
@@ -41,6 +42,7 @@ np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
+    print("use cuda")
 
 
 def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
@@ -58,7 +60,7 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     for i, (data, target) in enumerate(train_loader):
         output, hn = model(data)
         output = output[-args.tar_len:]
-        loss_train = criterion(output.reshape(-1), target.reshape( -1))
+        loss_train = criterion(output.reshape(args.batch_size, -1), target.reshape(args.batch_size, -1))
         optimizer.zero_grad()
         loss_train.backward()
         optimizer.step()
@@ -87,7 +89,7 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
     for i, (data, target) in enumerate(test_loader):
         output, hn = model(data)
         output = output[-args.tar_len:]
-        loss_test = criterion(output.reshape(-1), target.reshape(-1))
+        loss_test = criterion(output.reshape(args.batch_size, -1), target.reshape(args.batch_size, -1))
         loss = get_losses(target.view(-1).detach(), output.view(-1).detach(), method='rmse')
         targets.extend(target.view(-1).detach())
         predictions.extend(output.view(-1).detach())
@@ -116,13 +118,13 @@ def data_init(args):
         targets_val = targets_val.unsqueeze(1)
         targets_test = targets_test.unsqueeze(1)
 
-    # targets_train, mu, std = normalization(targets_train)
-    # targets_val,_,_ = normalization(targets_val, mu, std)
-    # targets_test,_,_ = normalization(targets_test, mu, std)
+    targets_train, mu, std = normalization(targets_train)
+    targets_val,_,_ = normalization(targets_val, mu, std)
+    targets_test,_,_ = normalization(targets_test, mu, std)
 
-    features_train, mu, std = normalization(features_train)
-    features_val, _, _ = normalization(features_val, mu, std)
-    features_test, _, _ = normalization(features_test, mu, std)
+    # features_train, mu, std = normalization(features_train)
+    # features_val, _, _ = normalization(features_val, mu, std)
+    # features_test, _, _ = normalization(features_test, mu, std)
 
     print("featues_train shape: ", features_train.shape)
     print("targets_train shape: ", targets_train.shape)
@@ -153,14 +155,16 @@ if __name__ == "__main__":
     # debug(features_test, targets_test)
     # debug(features_val, targets_val)
     # Model and optimizer
-    model = TGCN(in_feat=args.node_features,
-                 out_feat=targets_train.shape[-1],
-                 G_feat=1,
-                 seq_len=args.pre_len,
-                 n_layers=2,
-                 dropout=args.dropout,
-                 adj=adj,
-                 mode='GRU')
+    # model = TGCN(in_feat=args.node_features,
+    #              out_feat=targets_train.shape[-1],
+    #              G_hidden=1,
+    #              RNN_hidden=3,
+    #              seq_len=args.pre_len,
+    #              n_layers=2,
+    #              dropout=args.dropout,
+    #              adj=adj,
+    #              mode='GRU')
+    model = RNN(in_feat=args.node_features*adj.shape[0], out_feat=targets_train.shape[-1], n_layers=2, dropout=0.1, mode='GRU')
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.cuda:

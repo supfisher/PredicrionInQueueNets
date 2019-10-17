@@ -1,3 +1,8 @@
+numpy
+pandas
+xgboost
 torch_sparse
 torch_scatter
 torch_cluster
+torch_geometric
+matplotlib
