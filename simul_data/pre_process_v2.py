@@ -131,14 +131,13 @@ def data2pickle(data_dic, path):
 if __name__=='__main__':
     weight = 1
     height = 5
-    window_step = 50
-    time_step = 100
-    sample_rate = 0.1
-    num_nodes = height
+
     if weight != 1:
         num_nodes = int((math.pow(weight, height+1)-1)/(weight-1))
+    else:
+        num_nodes = height
     data = load_data('weight_'+str(weight)+'_height_'+str(height)+'_agent_queue.csv')
-    data = data[0: int(len(data)/3*2)]
+    data = data[int(len(data)/5):]
     features, features_dict, targets, targets_dic = slide_data(data, num_nodes)
     print(features.shape)
     print(features[-10:-1])

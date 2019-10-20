@@ -1,4 +1,5 @@
 import numpy as np
+import random
 import scipy.sparse as sp
 import torch
 import pickle
@@ -6,6 +7,16 @@ import pandas as pd
 import os
 import math
 from torch_geometric.data import Data, Batch
+from enum import Enum
+
+
+class Index(Enum):
+    arrival = 0
+    service = 1
+    departure = 2
+    num_queued = 3
+    num_total = 4
+    q_id = 5
 
 
 def adjMat2edgeIndex(adj):
@@ -38,25 +49,33 @@ def load_path(path="simul_data"):
     return adj, edge_index, features, targets
 
 
-def train_test_split(features, targets, ratio=(0.5, 0.3, )):
+def train_test_split(features, targets, ratio=(0.5, 0.3, ), sample_rate=None, constant_step=True):
     """split the loaded features data into train dataset and test dataset
     features shape: key: times, values: (num_nodes, node_feature)
     target feature: key: times, values: (target_feature)"""
-    Id={'q_id': 0, 'service_time': 1, 'response_time': 2}
     assert sum(ratio) <= 1
-    times = sorted(list(features.keys()))
+    Id = {'q_id': 0, 'arrival': 1, 'service': 2, 'departure': 3}
+    times = np.array(sorted(list(features.keys())))
+    if sample_rate is not None:
+        if constant_step:
+            index = np.arange(0, len(times), int(1 / sample_rate))
+            times = times[index]
+        else:
+            times = random.sample(times, int(len(times) * sample_rate))
+
     features_train = [features[i] for i in times[0: int(len(times)*ratio[0])]]
     features_val = [features[i] for i in times[int(len(times)*ratio[0]):int(len(times)*(ratio[0]+ratio[1]))]]
     features_test = [features[i] for i in times[int(len(times)*(ratio[0]+ratio[1])):]]
 
-    targets_train = [targets[i][Id['service_time'],] for i in times[0: int(len(times) * ratio[0])]]
-    targets_val = [targets[i][Id['service_time'],] for i in times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
-    targets_test = [targets[i][Id['service_time'],] for i in times[int(len(times) * (ratio[0] + ratio[1])):]]
+    targets_train = [targets[i][Id['service']]-targets[i][Id['arrival']] for i in times[0: int(len(times) * ratio[0])]]
+    targets_val = [targets[i][Id['service']]-targets[i][Id['arrival']] for i in times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
+    targets_test = [targets[i][Id['service']]-targets[i][Id['arrival']] for i in times[int(len(times) * (ratio[0] + ratio[1])):]]
     return features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
 def normalization(data, mu=None, std=None):
     """the first dimision of data is len(times)"""
+    data = torch.tensor(data)
     if mu is None and std is None:
         mu = torch.mean(data, dim=0)
         std = torch.std(data, dim=0)
@@ -193,6 +212,6 @@ def get_losses(target, prediction, method='rmse'):
 
 def visulization(target, prediction):
     import matplotlib.pyplot as plt
-    plt.plot(target, 'r^')
+    plt.plot(target, 'r^-')
     plt.plot(prediction, 'b')
     plt.show()
