@@ -10,9 +10,9 @@ from sklearn.metrics import make_scorer
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=20,
+parser.add_argument('--epochs', type=int, default=200,
                     help='Number of epochs to train.')
-parser.add_argument('--pre_len', type=int, default=5,
+parser.add_argument('--pre_len', type=int, default=1,
                     help='the length of input data sequence.')
 parser.add_argument('--tar_len', type=int, default=1,
                     help='the length of output target sequence.')

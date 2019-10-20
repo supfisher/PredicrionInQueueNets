@@ -87,7 +87,7 @@ def graph2queue(adja_list, edge_list, args):
     q_args = {
         1: {
             'arrival_f': arr_f,
-            'service_f': lambda t: t+np.random.exponential(0.1),
+            'service_f': lambda t: t+np.random.exponential(1),
             'AgentFactory': qt.GreedyAgent
         },
         2: {

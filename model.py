@@ -67,7 +67,7 @@ class RNN(nn.Module):
 
     def forward(self, x):
         '''the shape of x: (seq_len, batch_size, num_nodes, nodes_feature)
-        the shape of out: (seq_len, batch_size, num_nodes)'''
+        the shape of out: (seq_len, batch_size, out_feat)'''
         out = torch.stack([xx.reshape(xx.shape[0], -1) for xx in x])
         out, hn = self.rnn(out)
         return out, hn

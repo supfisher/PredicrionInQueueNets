@@ -79,13 +79,13 @@ def slide_data(data, num_nodes, order=3, processed=True):
 
     orders_list = [binary_search(arv_array, arv_arrays[i][order]) for i in range(num_nodes)]
     start_index = max(orders_list)
-    features = np.zeros((len(data) - start_index, num_nodes, 1+order*2)) #features are sorted by how many arrived but not served
+    features = np.zeros((len(data) - start_index, num_nodes, order*2+2)) #features are sorted by how many arrived but not served
     features_dict = {}
     targets = np.zeros((len(data) - start_index, 4)) ## we record the (q_id, arrv_time, service_time, response time)
     targets_dic = {}
 
     for i in range(start_index, len(arv_array)):
-        features_tmp = np.zeros([num_nodes, 1+order*2])
+        features_tmp = np.zeros([num_nodes, order*2+2])
         current_time = arv_array[i]
 
         for q in range(num_nodes):
@@ -96,16 +96,17 @@ def slide_data(data, num_nodes, order=3, processed=True):
             sorted_prev_serv_array = sev_arrays[current_q][sorted_index] # store the sorted service time whose arrv time is less than current_time
             index_serv = binary_search(sorted_prev_serv_array, current_time)
 
-            features_tmp[current_q, 0] = index_arrv - index_serv
+            features_tmp[current_q, -2] = index_arrv - index_serv #how many arrival but not serve
+            features_tmp[current_q, -1] = data[i][Index.q_id.value] # which queue does this log happen on?
 
             sorted_prev_arv_array = arv_arrays[current_q][index_arrv-order:index_arrv+1]
             sorted_prev_serv_array = sorted_prev_serv_array[-order-1:]
             if processed:
-                features_tmp[current_q, 1:1 + order] = order_inter_time(sorted_prev_arv_array)
-                features_tmp[current_q, 1 + order:1+order*2] = order_inter_time(sorted_prev_serv_array)
+                features_tmp[current_q, 0:0 + order] = order_inter_time(sorted_prev_arv_array)
+                features_tmp[current_q, 0 + order:0+order*2] = order_inter_time(sorted_prev_serv_array)
             else:
-                features_tmp[current_q, 1:1 + order] = _1order_inter_time(sorted_prev_arv_array)
-                features_tmp[current_q, 1 + order:1 + order * 2] = _1order_inter_time(sorted_prev_serv_array)
+                features_tmp[current_q, 0:0 + order] = _1order_inter_time(sorted_prev_arv_array)
+                features_tmp[current_q, 0 + order:0 + order * 2] = _1order_inter_time(sorted_prev_serv_array)
 
         features[i - start_index] = features_tmp
         features_dict[current_time] = features_tmp
@@ -138,7 +139,7 @@ if __name__=='__main__':
         num_nodes = height
     data = load_data('weight_'+str(weight)+'_height_'+str(height)+'_agent_queue.csv')
     data = data[int(len(data)/5):]
-    features, features_dict, targets, targets_dic = slide_data(data, num_nodes)
+    features, features_dict, targets, targets_dic = slide_data(data, num_nodes, order=1)
     print(features.shape)
     print(features[-10:-1])
     adj = load_data('weight_' + str(weight) + '_height_' + str(height) + '_adj.csv')

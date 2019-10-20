@@ -15,10 +15,14 @@ parser.add_argument('--no-cuda', action='store_true', default=True,
                     help='Disables CUDA training.')
 parser.add_argument('--shuffle', action='store_true', default=False,
                     help='Whether to shuffle the dataset.')
+parser.add_argument('--graphlib', action='store_true', default=False,
+                    help='Whether to use the torch_geometric graph lib.')
+parser.add_argument('--padding', action='store_true', default=True,
+                    help='Whether to padding the input. If yes, the seq_len of RNN model==pre_len_tar_len')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=2,
+parser.add_argument('--epochs', type=int, default=4,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=1,
+parser.add_argument('--lr', type=float, default=0.1,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
@@ -26,14 +30,15 @@ parser.add_argument('--hidden', type=int, default=2,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.2,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--pre_len', type=int, default=50,
+parser.add_argument('--pre_len', type=int, default=1,
                     help='the length of input data sequence.')
 parser.add_argument('--tar_len', type=int, default=1,
                     help='the length of output target sequence.')
-parser.add_argument('--batch_size', type=int, default=64,
+parser.add_argument('--batch_size', type=int, default=16,
                     help='the batch size.')
 parser.add_argument('--feq', type=int, default=30,
                     help='frequency to show the accuracy.')
+
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -48,8 +53,8 @@ if args.cuda:
 def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
-    losses = AverageMeter('Loss', ':.4e')
-    train_losses = AverageMeter('Training Loss', ':.4e')
+    losses = AverageMeter('Loss', ':6.2f')
+    train_losses = AverageMeter('Training Loss', ':.4f')
     progress = ProgressMeter(
         100,
         [batch_time, data_time, losses, train_losses],
@@ -59,14 +64,19 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     model.train()
     for i, (data, target) in enumerate(train_loader):
         output, hn = model(data)
-        output = output[-args.tar_len:]
-        loss_train = criterion(output.reshape(args.batch_size, -1), target.reshape(args.batch_size, -1))
-        optimizer.zero_grad()
-        loss_train.backward()
-        optimizer.step()
+        output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
+        target = target[-args.tar_len:].reshape(-1).long()
+        loss_train = criterion(output, target)
 
-        loss = get_losses(target.view(-1).detach(), output.view(-1).detach(), method='rmse')
-        losses.update(loss, 1)
+        loss_train.backward()
+        # for name, params in model.named_parameters():
+        #     print(name, ": grad: ", params.grad.data)
+        #     print(name, ": data: ", params.data)
+        optimizer.step()
+        optimizer.zero_grad()
+
+        loss = get_losses(target, output, method='rmse')
+        losses.update(loss, output.shape[0])
         train_losses.update(loss_train.item(), args.batch_size)
         if i % args.feq == 0:
             progress.display(i)
@@ -75,8 +85,8 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
 def test(test_loader, model, criterion, epoch=0, mode='test'):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
-    losses = AverageMeter('Loss', ':.4e')
-    test_losses = AverageMeter(mode+' Loss', ':.4e')
+    losses = AverageMeter('Loss', ':6.3f')
+    test_losses = AverageMeter(mode+' Loss', ':.4f')
     progress = ProgressMeter(
         100,
         [batch_time, data_time, losses, test_losses],
@@ -88,13 +98,18 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
     predictions = []
     for i, (data, target) in enumerate(test_loader):
         output, hn = model(data)
-        output = output[-args.tar_len:]
-        loss_test = criterion(output.reshape(args.batch_size, -1), target.reshape(args.batch_size, -1))
-        loss = get_losses(target.view(-1).detach(), output.view(-1).detach(), method='rmse')
-        targets.extend(target.view(-1).detach())
-        predictions.extend(output.view(-1).detach())
-        losses.update(loss, 1)
+        output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
+        target = target[-args.tar_len:].squeeze().long()
+        loss_test = criterion(output, target)
         test_losses.update(loss_test.item(), args.batch_size)
+        loss = get_losses(target, output, method='rmse')
+        losses.update(loss, 1)
+
+        targets.extend(target.view(-1).detach())
+        _, pred = output.topk(1, 1, True, True)
+        pred = pred.t()
+        predictions.extend(pred.view(-1).detach())
+
     progress.display(i)
     if mode == 'test':
         print("targets: ", targets)
@@ -118,23 +133,16 @@ def data_init(args):
         targets_val = targets_val.unsqueeze(1)
         targets_test = targets_test.unsqueeze(1)
 
-    targets_train, mu, std = normalization(targets_train)
-    targets_val,_,_ = normalization(targets_val, mu, std)
-    targets_test,_,_ = normalization(targets_test, mu, std)
 
-    # features_train, mu, std = normalization(features_train)
-    # features_val, _, _ = normalization(features_val, mu, std)
-    # features_test, _, _ = normalization(features_test, mu, std)
+    features_train, mu, std = normalization(features_train)
+    features_val, _, _ = normalization(features_val, mu, std)
+    features_test, _, _ = normalization(features_test, mu, std)
 
     print("featues_train shape: ", features_train.shape)
     print("targets_train shape: ", targets_train.shape)
     args.num_nodes = features_train.shape[1]
     assert adj.shape[0] == features_train.shape[1]
     args.node_features = features_train.shape[2]
-
-    targets_train = generate_targets(targets_train, args.pre_len, args.tar_len, args)
-    targets_val = generate_targets(targets_val, args.pre_len, args.tar_len, args)
-    targets_test = generate_targets(targets_test, args.pre_len, args.tar_len, args)
 
     return adj, edge_index, features_train, features_val, features_test, targets_train, targets_val, targets_test
 
@@ -164,9 +172,9 @@ if __name__ == "__main__":
     #              dropout=args.dropout,
     #              adj=adj,
     #              mode='GRU')
-    model = RNN(in_feat=args.node_features*adj.shape[0], out_feat=targets_train.shape[-1], n_layers=2, dropout=0.1, mode='GRU')
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    model = RNN(in_feat=args.node_features*adj.shape[0], out_feat=5, n_layers=2, dropout=args.dropout, mode='GRU')
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.cuda:
         model.cuda()
         print("use cuda")
