@@ -49,7 +49,7 @@ def load_path(path="simul_data"):
     return adj, edge_index, features, targets
 
 
-def train_test_split(features, targets, ratio=(0.5, 0.3, ), sample_rate=None, constant_step=True):
+def train_test_split(features, targets, ratio=(0.7, 0, ), sample_rate=None, constant_step=True):
     """split the loaded features data into train dataset and test dataset
     features shape: key: times, values: (num_nodes, node_feature)
     target feature: key: times, values: (target_feature)"""
@@ -63,23 +63,27 @@ def train_test_split(features, targets, ratio=(0.5, 0.3, ), sample_rate=None, co
         else:
             times = random.sample(times, int(len(times) * sample_rate))
 
-    features_train = [features[i] for i in times[0: int(len(times)*ratio[0])]]
-    features_val = [features[i] for i in times[int(len(times)*ratio[0]):int(len(times)*(ratio[0]+ratio[1]))]]
-    features_test = [features[i] for i in times[int(len(times)*(ratio[0]+ratio[1])):]]
+    index = np.arange(len(times))
+    train_index = index[0:int(len(times)*ratio[0])]
+    val_index = index[int(len(times)*ratio[0]):int(len(times)*(ratio[0]+ratio[1]))]
+    test_index = index[int(len(times)*(ratio[0]+ratio[1])):]
+    features_train = [features[i] for i in times[train_index]]
+    features_val = [features[i] for i in times[val_index]]
+    features_test = [features[i] for i in times[test_index]]
 
-    # targets_train = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
+    targets_train = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
+                     times[train_index]]
+    targets_val = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
+                   times[val_index]]
+    targets_test = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
+                    times[test_index]]
+
+    # targets_train = [targets[i][Id['q_id']] for i in
     #                  times[0: int(len(times) * ratio[0])]]
-    # targets_val = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
+    # targets_val = [targets[i][Id['q_id']] for i in
     #                times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
-    # targets_test = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
+    # targets_test = [targets[i][Id['q_id']] for i in
     #                 times[int(len(times) * (ratio[0] + ratio[1])):]]
-
-    targets_train = [targets[i][Id['q_id']] for i in
-                     times[0: int(len(times) * ratio[0])]]
-    targets_val = [targets[i][Id['q_id']] for i in
-                   times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
-    targets_test = [targets[i][Id['q_id']] for i in
-                    times[int(len(times) * (ratio[0] + ratio[1])):]]
 
     return features_train, features_val, features_test, targets_train, targets_val, targets_test
 
@@ -95,6 +99,11 @@ def normalization(data, mu=None, std=None):
     return data, mu, std
 
 
+def de_normalization(data, mu, std):
+    data = data*std+mu
+    return data
+
+
 def generate_targets(targets, pre_len, tar_len, args):
     """targets output is a (len(targets)-pre_len-tar_len, tar_len, target_features)"""
     len_feat = len(targets)
@@ -104,77 +113,74 @@ def generate_targets(targets, pre_len, tar_len, args):
     return output
 
 
-def data_loader(features, targets, batch_size, args):
-    """features:(len(times), num_nodes, node_feature)
-    targets: (len(features)-pre_len-tar_len, target_features)
-    return: (data, target)
-    data_batch:(pre_len, batch_size, num_nodes, node_feature)
-    target_batch:(tar_len, batch_size, target_features)"""
-
-    pre_len = args.pre_len
-    tar_len = args.tar_len
-    shift_len = args.pre_len-1
-    if args.padding:
-        pre_len=tar_len=args.pre_len+args.tar_len-1
-        shift_len = 0
-
-    orders = torch.tensor(range(len(features) - args.pre_len - args.tar_len))
-    if args.shuffle:
-        orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
-    for i in range(0, len(orders), batch_size):
-        data_batch = torch.ones(pre_len, args.batch_size, args.num_nodes, args.node_features)*-1
-        target_batch = torch.zeros(tar_len, args.batch_size, targets.shape[-1])
-        orders_chunk = orders[i:min(i + batch_size, len(orders) - 1)]
-
-        for j, id in enumerate(orders_chunk):
-            target_batch[:, j, :] = targets[id+shift_len:id+shift_len+tar_len]
-        for j, id in enumerate(orders_chunk):
-            data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
-
-        yield data_batch, target_batch
-
-
 # def data_loader(features, targets, batch_size, args):
 #     """features:(len(times), num_nodes, node_feature)
-#     targets: (len(features)-pre_len-tar_len, tar_len, target_features)
-#     retrun: (data, target)
+#     targets: (len(features)-pre_len-tar_len, target_features)
+#     return: (data, target)
 #     data_batch:(pre_len, batch_size, num_nodes, node_feature)
 #     target_batch:(tar_len, batch_size, target_features)"""
+#
 #     pre_len = args.pre_len
 #     tar_len = args.tar_len
-#     shift_len = args.pre_len - 1
+#     shift_len = args.pre_len-1
 #     if args.padding:
-#         pre_len = tar_len = args.pre_len + args.tar_len
+#         pre_len=tar_len=args.pre_len+args.tar_len-1
 #         shift_len = 0
 #
 #     orders = torch.tensor(range(len(features) - args.pre_len - args.tar_len))
 #     if args.shuffle:
 #         orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
-#     for i in range(0, int(len(orders)/batch_size)*batch_size, batch_size):
-#         features_batch = [[] for _ in range(args.pre_len)]
-#
-#         target_batch = torch.empty(tar_len, args.batch_size, targets.shape[-1])
-#         orders_chunk = orders[i: i + batch_size]
+#     for i in range(0, len(orders), batch_size):
+#         data_batch = torch.ones(pre_len, args.batch_size, args.num_nodes, args.node_features)*-1
+#         target_batch = torch.zeros(tar_len, args.batch_size, targets.shape[-1])
+#         orders_chunk = orders[i:min(i + batch_size, len(orders) - 1)]
 #
 #         for j, id in enumerate(orders_chunk):
 #             target_batch[:, j, :] = targets[id+shift_len:id+shift_len+tar_len]
-#
-#         data_batch = []
-#         if args.graphlib:
-#             for j, id in enumerate(orders_chunk):
-#                 for k in range(args.pre_len):
-#                     d = Data(x=features[id + k, :, :], edge_index=args.edge_index)
-#                     features_batch[k].append(d)
-#             for k in range(args.pre_len):
-#                 data_batch.append(Batch.from_data_list(features_batch[k]))
-#
-#         else:
-#             data_batch = torch.zeros(pre_len, args.batch_size, args.num_nodes, args.node_features)
-#             for j, id in enumerate(orders_chunk):
-#                 data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
-#
+#         for j, id in enumerate(orders_chunk):
+#             data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
 #
 #         yield data_batch, target_batch
+
+
+def data_loader(features, targets, batch_size, args):
+    """features:(len(times), num_nodes, node_feature)
+    targets: (len(features)-pre_len-tar_len, tar_len, target_features)
+    retrun: (data, target)
+    data_batch:(pre_len, batch_size, num_nodes, node_feature)
+    target_batch:(tar_len, batch_size, target_features)"""
+    pre_len = args.pre_len
+    tar_len = args.tar_len
+    shift_len = args.pre_len - 1
+    if args.padding:
+        pre_len = tar_len = args.pre_len + args.tar_len
+        shift_len = 0
+
+    orders = torch.tensor(range(len(features) - args.pre_len - args.tar_len))
+    if args.shuffle:
+        orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
+    for i in range(0, int(len(orders)/batch_size)*batch_size, batch_size):
+        features_batch = [[] for _ in range(args.pre_len)]
+
+        target_batch = torch.empty(tar_len, args.batch_size, targets.shape[-1])
+        orders_chunk = orders[i: i + batch_size]
+
+        for j, id in enumerate(orders_chunk):
+            target_batch[:, j, :] = targets[id+shift_len:id+shift_len+tar_len]
+
+        data_batch = []
+        if args.graphlib:
+            for j, id in enumerate(orders_chunk):
+                for k in range(args.pre_len):
+                    d = Data(x=features[id + k, :, :], edge_index=args.edge_index)
+                    features_batch[k].append(d)
+            for k in range(args.pre_len):
+                data_batch.append(Batch.from_data_list(features_batch[k]))
+        else:
+            data_batch = torch.zeros(pre_len, args.batch_size, args.num_nodes, args.node_features)
+            for j, id in enumerate(orders_chunk):
+                data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
+        yield data_batch, target_batch
 
 
 
@@ -268,8 +274,10 @@ def get_losses(target, prediction, method='rmse'):
             return accuracy(prediction, target)
 
 
-def visulization(target, prediction):
+def visulization(target, prediction, ratio=0.2):
     import matplotlib.pyplot as plt
-    plt.plot(target, 'r^-')
-    plt.plot(prediction, 'b')
+    target_index = np.arange(1, len(target), int(1/ratio))
+    prediction_index = np.arange(1, len(prediction), int(1 / ratio))
+    plt.plot(np.array(target)[target_index], 'r^-')
+    plt.plot(np.array(prediction)[prediction_index], 'b')
     plt.show()

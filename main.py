@@ -13,24 +13,24 @@ import torch.optim as optim
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=True,
                     help='Disables CUDA training.')
-parser.add_argument('--shuffle', action='store_true', default=False,
+parser.add_argument('--shuffle', action='store_true', default=True,
                     help='Whether to shuffle the dataset.')
 parser.add_argument('--graphlib', action='store_true', default=False,
                     help='Whether to use the torch_geometric graph lib.')
-parser.add_argument('--padding', action='store_true', default=True,
+parser.add_argument('--padding', action='store_true', default=False,
                     help='Whether to padding the input. If yes, the seq_len of RNN model==pre_len_tar_len')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=4,
+parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=0.1,
+parser.add_argument('--lr', type=float, default=0.05,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
 parser.add_argument('--hidden', type=int, default=2,
                     help='Number of hidden units.')
-parser.add_argument('--dropout', type=float, default=0.2,
+parser.add_argument('--dropout', type=float, default=0.4,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--pre_len', type=int, default=1,
+parser.add_argument('--pre_len', type=int, default=5,
                     help='the length of input data sequence.')
 parser.add_argument('--tar_len', type=int, default=1,
                     help='the length of output target sequence.')
@@ -62,10 +62,12 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
 
     t = time.time()
     model.train()
+    targets = []
+    predictions = []
     for i, (data, target) in enumerate(train_loader):
         output, hn = model(data)
         output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
-        target = target[-args.tar_len:].reshape(-1).long()
+        target = target[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
         loss_train = criterion(output, target)
 
         loss_train.backward()
@@ -80,6 +82,11 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
         train_losses.update(loss_train.item(), args.batch_size)
         if i % args.feq == 0:
             progress.display(i)
+
+        targets.extend(target.view(-1).detach())
+        predictions.extend(output.view(-1).detach())
+    if epoch % 5 == 0:
+        visulization(targets, predictions, ratio=0.05)
 
 
 def test(test_loader, model, criterion, epoch=0, mode='test'):
@@ -99,22 +106,20 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
     for i, (data, target) in enumerate(test_loader):
         output, hn = model(data)
         output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
-        target = target[-args.tar_len:].squeeze().long()
+        target = target[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
         loss_test = criterion(output, target)
         test_losses.update(loss_test.item(), args.batch_size)
         loss = get_losses(target, output, method='rmse')
         losses.update(loss, 1)
 
         targets.extend(target.view(-1).detach())
-        _, pred = output.topk(1, 1, True, True)
-        pred = pred.t()
-        predictions.extend(pred.view(-1).detach())
+        predictions.extend(output.view(-1).detach())
 
     progress.display(i)
     if mode == 'test':
         print("targets: ", targets)
         print("predictions: ", predictions)
-        visulization(targets, predictions)
+        visulization(targets, predictions, ratio=0.05)
 
 
 def data_init(args):
@@ -133,6 +138,9 @@ def data_init(args):
         targets_val = targets_val.unsqueeze(1)
         targets_test = targets_test.unsqueeze(1)
 
+    targets_train, mu, std = normalization(targets_train)
+    targets_val, _, _ = normalization(targets_val, mu, std)
+    targets_test, _, _ = normalization(targets_test, mu, std)
 
     features_train, mu, std = normalization(features_train)
     features_val, _, _ = normalization(features_val, mu, std)
@@ -144,7 +152,9 @@ def data_init(args):
     assert adj.shape[0] == features_train.shape[1]
     args.node_features = features_train.shape[2]
 
-    return adj, edge_index, features_train, features_val, features_test, targets_train, targets_val, targets_test
+    return adj, edge_index, features_train, features_val, features_test, \
+           targets_train, targets_val, targets_test
+
 
 def debug(features_test, targets_test):
     """debug"""
@@ -157,23 +167,32 @@ def debug(features_test, targets_test):
 
 if __name__ == "__main__":
     # Load data
-    adj, edge_index, features_train, features_val, features_test, targets_train, targets_val, targets_test = data_init(args)
+    adj, edge_index, features_train, features_val, features_test, \
+    targets_train, targets_val, targets_test = data_init(args)
+
     args.edge_index = edge_index
     train_loader, val_loader, test_loader = None, None, None
     # debug(features_test, targets_test)
     # debug(features_val, targets_val)
     # Model and optimizer
-    # model = TGCN(in_feat=args.node_features,
-    #              out_feat=targets_train.shape[-1],
-    #              G_hidden=1,
-    #              RNN_hidden=3,
-    #              seq_len=args.pre_len,
-    #              n_layers=2,
-    #              dropout=args.dropout,
-    #              adj=adj,
-    #              mode='GRU')
-    model = RNN(in_feat=args.node_features*adj.shape[0], out_feat=5, n_layers=2, dropout=args.dropout, mode='GRU')
-    criterion = nn.CrossEntropyLoss()
+    if args.padding:
+        seq_len = args.pre_len+args.tar_len
+    else:
+        seq_len = args.pre_len
+
+    if args.graphlib:
+        model = TGCN(in_feat=args.node_features,
+                     out_feat=args.node_features,
+                     G_hidden=1,
+                     seq_len=seq_len,
+                     n_layers=2,
+                     dropout=args.dropout,
+                     adj=adj,
+                     mode='GRU')
+    else:
+        model = RNN(in_feat=args.node_features*adj.shape[0], out_feat=args.node_features*adj.shape[0], n_layers=2, dropout=args.dropout, mode='GRU')
+
+    criterion = nn.MSELoss()
     optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     if args.cuda:
         model.cuda()

@@ -138,8 +138,8 @@ if __name__=='__main__':
     else:
         num_nodes = height
     data = load_data('weight_'+str(weight)+'_height_'+str(height)+'_agent_queue.csv')
-    data = data[int(len(data)/5):]
-    features, features_dict, targets, targets_dic = slide_data(data, num_nodes, order=1)
+    data = data[int(len(data)/5):int(len(data)/5*4)]
+    features, features_dict, targets, targets_dic = slide_data(data, num_nodes, order=5)
     print(features.shape)
     print(features[-10:-1])
     adj = load_data('weight_' + str(weight) + '_height_' + str(height) + '_adj.csv')

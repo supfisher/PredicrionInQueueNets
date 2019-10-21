@@ -206,7 +206,7 @@ if __name__=='__main__':
     print(edge_list)
     qn = graph2queue(adja_list, edge_list, args)
     queue_show(qn, args)
-    data = queue_simu(qn, args, use_queue=True, t=60000)
+    data = queue_simu(qn, args, use_queue=True, t=180000)
 
     data = simplfy_data(data, use_queue=True)
 
