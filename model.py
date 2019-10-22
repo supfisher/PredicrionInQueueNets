@@ -17,7 +17,7 @@ class GCN(nn.Module):
         x = torch.sigmoid(x)
         x = F.dropout(x, self.dropout, training=self.training)
         x = self.conv2(x, edge_index)
-        return x
+        return torch.sigmoid(x)
 
 
 class TGCN(nn.Module):

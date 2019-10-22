@@ -1,6 +1,7 @@
 import queueing_tool as qt
 import numpy as np
 import copy
+from collections import Counter
 import argparse
 parser = argparse.ArgumentParser(description='build a simulate queue network')
 from enum import Enum
@@ -98,7 +99,7 @@ def graph2queue(adja_list, edge_list, args):
     }
     for i in range(3, args.height+2):
         q_args[i] = {'num_servers': 3,
-                        'service_f': lambda t: t + np.random.exponential(15),
+                        'service_f': lambda t: t + np.random.exponential(15*((i-1)*(args.weight-1)+1)),
                         'AgentFactory': qt.GreedyAgent}
     print("q_args: ", q_args)
     g = qt.adjacency2graph(adjacency=adja_list, edge_type=edge_list)
@@ -154,13 +155,21 @@ def data2pickle(data_dic, path):
         pickle.dump(data_dic, f)
 
 
-def simplfy_data(data_agent, use_queue=True):
+def simplfy_data(data_agent, limit_num=100, use_queue=True):
     if use_queue:
         simple_data = []
         for v in data_agent[0]:
             if v[Index.departure.value] > 0:
                 simple_data.append(v)
-        index = np.argsort(np.array(simple_data)[:, Index.arrival.value])
+        simple_data = np.array(simple_data)
+        q_ids = simple_data[:,-1]
+        counter = Counter(q_ids)
+        valid_index = []
+        for q in set(q_ids):
+            if counter[q] >= limit_num:
+                valid_index.extend(np.where(q_ids == q)[0])
+        simple_data = simple_data[valid_index]
+        index = np.argsort(simple_data[:, Index.arrival.value])
         return np.array(simple_data)[index, :]
     else:
         simple_data = {}
@@ -177,13 +186,13 @@ def adj_dict2mat(adja_list, num_nodes):
     return mat
 
 
-def edge_adj2mat(OutEdgeView):
+def edge_adj2mat(OutEdgeView, valid_edges=None):
     """generate an adjcent matrix from the queue"""
     edges = [e for e in OutEdgeView if e[0] != e[1]]
     mat = np.zeros((len(edges), len(edges)))
     for i, edge_in in enumerate(edges):
         for j, edge_out in enumerate(edges):
-            if edge_in[1] == edge_out[0]:
+            if edge_in[1] == edge_out[0] and edge_in[1] in valid_edges and edge_out[0] in valid_edges:
                 mat[i, j] = 1
     return mat
 
@@ -206,13 +215,14 @@ if __name__=='__main__':
     print(edge_list)
     qn = graph2queue(adja_list, edge_list, args)
     queue_show(qn, args)
-    data = queue_simu(qn, args, use_queue=True, t=180000)
+    data = queue_simu(qn, args, use_queue=True, t=100000)
 
-    data = simplfy_data(data, use_queue=True)
-
+    data = simplfy_data(data, limit_num=100, use_queue=True)
+    valid_edges = set(data[:, -1])
+    print("valid_edges: ", valid_edges)
     adjn_mat = adj_dict2mat(adja_list, len(qn.g.nodes()))
     print(qn.g.edges())
-    adjq_mat = edge_adj2mat(qn.g.edges())
+    adjq_mat = edge_adj2mat(qn.g.edges(), valid_edges)
     # queue_mat = queue_data_dict2mat(data)
     data2csv(adjq_mat, 'weight_'+str(weight)+'_height_'+str(height)+'_adj.csv')
 

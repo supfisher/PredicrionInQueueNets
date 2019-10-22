@@ -6,6 +6,9 @@ one single vector, these features have temporal dependence, current ML tools is 
 import pandas as pd
 import numpy as np
 import math
+# from threading import Thread as Multi
+from multiprocessing import Process as Multi
+import multiprocessing as mp
 from enum import Enum
 
 class Index(Enum):
@@ -31,7 +34,7 @@ def binary_search(arry, value):
 
 def load_data(path):
     data = pd.read_csv(path)
-    print(data.values[0:5])
+    # print(data.values[0:5])
     return data.values
 
 
@@ -53,7 +56,72 @@ def order_inter_time(time_array):
     return diff_ordered_values
 
 
-def slide_data(data, num_nodes, order=3, processed=True):
+class Slide_data_thread(Multi):
+    def __init__(self, id, q):
+        Multi.__init__(self)
+        self.id = id
+        self.q = q
+        kwargs = q.get()
+        self.index_range = kwargs['index_range']
+        self.datas = kwargs['data']
+        self.arrv_times = kwargs['arrv_time']
+        self.arv_arrays = kwargs['arv_arrays']
+        self.sev_index_maps = kwargs['sev_index_maps']
+        self.sev_indexs = kwargs['sev_indexs']
+        self.sev_arrays = kwargs['sev_arrays']
+        self.order = kwargs['order']
+        self.num_nodes = kwargs['num_nodes']
+        self.processed = kwargs['processed']
+
+    def run(self):
+        print("This is thread: ", self.id)
+        features, features_dict, targets, targets_dic = self.slide_data_process(self.index_range, self.arrv_times, self.datas,
+                                                                                self.arv_arrays, self.sev_index_maps,
+                                                                                self.sev_indexs, self.sev_arrays,
+                                                                                self.num_nodes, self.order, self.processed)
+        self.q.put([features, features_dict, targets, targets_dic])
+
+
+    def slide_data_process(self, index_range, arrv_times, datas, arv_arrays, sev_index_maps, sev_indexs, sev_arrays, num_nodes, order, processed):
+        features = np.zeros((len(index_range), num_nodes,
+                             order * 2 + 2))  # features are sorted by how many arrived but not served
+        features_dict = {}
+        targets = np.zeros(
+            (len(index_range), 4))  ## we record the (q_id, arrv_time, service_time, response time)
+        targets_dic = {}
+
+        for j, (i, current_time, data) in enumerate(zip(index_range, arrv_times, datas)):
+            features_tmp = np.zeros([num_nodes, order*2+2])
+
+            for q in range(num_nodes):
+                current_q = q
+                index_arrv = binary_search(arv_arrays[current_q], current_time)
+                index_maps = [sev_index_maps[current_q][id] for id in range(index_arrv+1)]
+                sorted_index = sev_indexs[current_q][index_maps]
+                sorted_prev_serv_array = sev_arrays[current_q][sorted_index] # store the sorted service time whose arrv time is less than current_time
+                index_serv = binary_search(sorted_prev_serv_array, current_time)
+
+                features_tmp[current_q, -2] = index_arrv - index_serv #how many arrival but not serve
+                features_tmp[current_q, -1] = data[Index.q_id.value] # which queue does this log happen on?
+
+                sorted_prev_arv_array = arv_arrays[current_q][index_arrv-order:index_arrv+1]
+                sorted_prev_serv_array = sorted_prev_serv_array[-order-1:]
+                if processed:
+                    features_tmp[current_q, 0:0 + order] = order_inter_time(sorted_prev_arv_array)
+                    features_tmp[current_q, 0 + order:0+order*2] = order_inter_time(sorted_prev_serv_array)
+                else:
+                    features_tmp[current_q, 0:0 + order] = _1order_inter_time(sorted_prev_arv_array)
+                    features_tmp[current_q, 0 + order:0 + order * 2] = _1order_inter_time(sorted_prev_serv_array)
+
+            features[j] = features_tmp
+            features_dict[current_time] = features_tmp
+
+            targets[j] = data[[Index.q_id.value, Index.arrival.value, Index.service.value, Index.departure.value]]
+            targets_dic[current_time] = targets[j]
+        return features, features_dict, targets, targets_dic
+
+
+def slide_data(data, order=3, processed=True):
     """a combination of slide_window and slide_time
      this function reads each log from the sorted arrival time log dataset: data,
      and generate features from the data[current-slide: current],
@@ -63,13 +131,18 @@ def slide_data(data, num_nodes, order=3, processed=True):
 
 
     arv_array = np.array(data[:, Index.arrival.value])
-    q_ids = np.array(data[:, Index.q_id.value])
+    q_ids = [int(q_id) for q_id in set(np.array(data[:, Index.q_id.value]))]
+
+    num_nodes = len(q_ids)
+    q_ids2index = {}
+    for i, q in enumerate(q_ids):
+        q_ids2index[q] = i
 
     arv_list = [[] for _ in range(num_nodes)]
     sev_list = [[] for _ in range(num_nodes)]
     for i, d in enumerate(data):
-        arv_list[int(d[Index.q_id.value])].append(d[Index.arrival.value])
-        sev_list[int(d[Index.q_id.value])].append(d[Index.service.value])
+        arv_list[q_ids2index[int(d[Index.q_id.value])]].append(d[Index.arrival.value])
+        sev_list[q_ids2index[int(d[Index.q_id.value])]].append(d[Index.service.value])
 
     arv_arrays = [np.array(arv) for arv in arv_list]
     sev_arrays = [np.array(sev) for sev in sev_list]
@@ -84,36 +157,39 @@ def slide_data(data, num_nodes, order=3, processed=True):
     targets = np.zeros((len(data) - start_index, 4)) ## we record the (q_id, arrv_time, service_time, response time)
     targets_dic = {}
 
-    for i in range(start_index, len(arv_array)):
-        features_tmp = np.zeros([num_nodes, order*2+2])
-        current_time = arv_array[i]
+    num_threads = 32
+    index_ranges = np.arange(0, len(arv_array)-start_index, int((len(arv_array)-start_index)/num_threads))
+    threads = []
+    queues = [mp.Manager().Queue() for _ in range(num_threads-1)]
 
-        for q in range(num_nodes):
-            current_q = q
-            index_arrv = binary_search(arv_arrays[current_q], current_time)
-            index_maps = [sev_index_maps[current_q][id] for id in range(index_arrv+1)]
-            sorted_index = sev_indexs[current_q][index_maps]
-            sorted_prev_serv_array = sev_arrays[current_q][sorted_index] # store the sorted service time whose arrv time is less than current_time
-            index_serv = binary_search(sorted_prev_serv_array, current_time)
+    for i, q in enumerate(queues):
+        index_range = np.arange(index_ranges[i], index_ranges[i+1])+start_index
+        kwargs = {
+            'index_range': index_range,
+            'arrv_time': arv_array[index_range],
+            'data': data[index_range],
+            'arv_arrays': arv_arrays,
+            'sev_index_maps': sev_index_maps,
+            'sev_indexs': sev_indexs,
+            'sev_arrays': sev_arrays,
+            'num_nodes': num_nodes,
+            'order': order,
+            'processed': processed
+        }
+        q.put(kwargs)
+        t = Slide_data_thread(i, q)
+        t.start()
+        threads.append(t)
+    for t in threads:
+        t.join()
+    for i, t in enumerate(threads):
+        t_features, t_features_dict, t_targets, t_targets_dic = t.q.get()
+        features[index_ranges[i]:index_ranges[i+1]] = t_features
+        features_dict = {**features_dict, **t_features_dict}
+        targets[index_ranges[i]:index_ranges[i+1]] = t_targets
+        targets_dic = {**targets_dic, **t_targets_dic}
 
-            features_tmp[current_q, -2] = index_arrv - index_serv #how many arrival but not serve
-            features_tmp[current_q, -1] = data[i][Index.q_id.value] # which queue does this log happen on?
-
-            sorted_prev_arv_array = arv_arrays[current_q][index_arrv-order:index_arrv+1]
-            sorted_prev_serv_array = sorted_prev_serv_array[-order-1:]
-            if processed:
-                features_tmp[current_q, 0:0 + order] = order_inter_time(sorted_prev_arv_array)
-                features_tmp[current_q, 0 + order:0+order*2] = order_inter_time(sorted_prev_serv_array)
-            else:
-                features_tmp[current_q, 0:0 + order] = _1order_inter_time(sorted_prev_arv_array)
-                features_tmp[current_q, 0 + order:0 + order * 2] = _1order_inter_time(sorted_prev_serv_array)
-
-        features[i - start_index] = features_tmp
-        features_dict[current_time] = features_tmp
-
-        targets[i - start_index] = data[i][[Index.q_id.value, Index.arrival.value, Index.service.value, Index.departure.value]]
-        targets_dic[current_time] = targets[i - start_index]
-    return features, features_dict, targets, targets_dic
+    return features, features_dict, targets, targets_dic, q_ids
 
 
 def data2csv(data_list, path):
@@ -130,20 +206,18 @@ def data2pickle(data_dic, path):
 
 
 if __name__=='__main__':
-    weight = 1
-    height = 5
+    weight = 2
+    height = 3
 
-    if weight != 1:
-        num_nodes = int((math.pow(weight, height+1)-1)/(weight-1))
-    else:
-        num_nodes = height
     data = load_data('weight_'+str(weight)+'_height_'+str(height)+'_agent_queue.csv')
-    data = data[int(len(data)/5):int(len(data)/5*4)]
-    features, features_dict, targets, targets_dic = slide_data(data, num_nodes, order=5)
+    data = data[int(len(data)/4):]
+    features, features_dict, targets, targets_dic, q_ids = slide_data(data, order=3)
+    print("valid queue ids: ", q_ids)
     print(features.shape)
-    print(features[-10:-1])
     adj = load_data('weight_' + str(weight) + '_height_' + str(height) + '_adj.csv')
     adj += adj.T
+    adj = adj[q_ids][:, q_ids]
+
     data2pickle(features_dict, './features.pkl')
     data2csv(adj, './adj.csv')
     data2pickle(targets_dic, './targets.pkl')

@@ -36,7 +36,7 @@ def normalizationMat(A):
     return torch.mm(torch.mm(D, A), D)
 
 
-def load_path(path="simul_data"):
+def load_path(path="./simul_data"):
     """load dataset from path
     adj is a matrix, features is a dict with times as key, and [n_nodes, 3] for each value"""
     adj = pd.read_csv(os.path.join(path, 'adj.csv'))
@@ -143,6 +143,13 @@ def generate_targets(targets, pre_len, tar_len, args):
 #         yield data_batch, target_batch
 
 
+def use_cuda(data_batch, target_batch, use_cuda):
+    if use_cuda:
+        return data_batch.cuda(), target_batch.cuda()
+    else:
+        return data_batch, target_batch
+
+
 def data_loader(features, targets, batch_size, args):
     """features:(len(times), num_nodes, node_feature)
     targets: (len(features)-pre_len-tar_len, tar_len, target_features)
@@ -180,8 +187,8 @@ def data_loader(features, targets, batch_size, args):
             data_batch = torch.zeros(pre_len, args.batch_size, args.num_nodes, args.node_features)
             for j, id in enumerate(orders_chunk):
                 data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
-        yield data_batch, target_batch
 
+        yield use_cuda(data_batch, target_batch, args.cuda)
 
 
 class AverageMeter(object):
@@ -274,10 +281,12 @@ def get_losses(target, prediction, method='rmse'):
             return accuracy(prediction, target)
 
 
-def visulization(target, prediction, ratio=0.2):
+def visulization(target, prediction, path='./', ratio=0.2, show=False):
     import matplotlib.pyplot as plt
     target_index = np.arange(1, len(target), int(1/ratio))
     prediction_index = np.arange(1, len(prediction), int(1 / ratio))
     plt.plot(np.array(target)[target_index], 'r^-')
     plt.plot(np.array(prediction)[prediction_index], 'b')
-    plt.show()
+    plt.savefig(path)
+    if show:
+        plt.show()

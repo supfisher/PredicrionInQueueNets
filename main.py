@@ -3,11 +3,13 @@ from utils import *
 import time
 import argparse
 import numpy as np
-
+import torch.distributed as dist
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
+from tensorboardX import SummaryWriter
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 # Training settings
 parser = argparse.ArgumentParser()
@@ -20,9 +22,9 @@ parser.add_argument('--graphlib', action='store_true', default=False,
 parser.add_argument('--padding', action='store_true', default=False,
                     help='Whether to padding the input. If yes, the seq_len of RNN model==pre_len_tar_len')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=20,
+parser.add_argument('--epochs', type=int, default=40,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=0.05,
+parser.add_argument('--lr', type=float, default=0.01,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
@@ -34,21 +36,23 @@ parser.add_argument('--pre_len', type=int, default=5,
                     help='the length of input data sequence.')
 parser.add_argument('--tar_len', type=int, default=1,
                     help='the length of output target sequence.')
-parser.add_argument('--batch_size', type=int, default=16,
+parser.add_argument('--batch_size', type=int, default=640,
                     help='the batch size.')
 parser.add_argument('--feq', type=int, default=30,
                     help='frequency to show the accuracy.')
 
 
-args = parser.parse_args()
-args.cuda = not args.no_cuda and torch.cuda.is_available()
 
-np.random.seed(args.seed)
-torch.manual_seed(args.seed)
-if args.cuda:
-    torch.cuda.manual_seed(args.seed)
-    print("use cuda")
 
+
+""" Gradient averaging. """
+def average_gradients(model):
+    size = float(dist.get_world_size())
+    for param in model.parameters():
+        dist.all_reduce(param.grad.data, op=dist.reduce_op.SUM)
+        param.grad.data /= size
+    for param in model.parameters():
+        dist.broadcast(param.data, src=0)
 
 def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     batch_time = AverageMeter('Time', ':6.3f')
@@ -74,19 +78,25 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
         # for name, params in model.named_parameters():
         #     print(name, ": grad: ", params.grad.data)
         #     print(name, ": data: ", params.data)
+        average_gradients(model)
         optimizer.step()
         optimizer.zero_grad()
 
         loss = get_losses(target, output, method='rmse')
         losses.update(loss, output.shape[0])
         train_losses.update(loss_train.item(), args.batch_size)
-        if i % args.feq == 0:
+        if i % args.feq == 0 and args.rank == 0:
+            args.writer.add_scalar('expriment loss', loss, args.feq*args.iteration)
+            args.writer.add_scalar('training loss', loss_train.item(), args.feq*args.iteration)
+            args.iteration += 1
             progress.display(i)
 
         targets.extend(target.view(-1).detach())
         predictions.extend(output.view(-1).detach())
-    if epoch % 5 == 0:
-        visulization(targets, predictions, ratio=0.05)
+
+    if epoch % 5 == 0 and args.rank == 0:
+        path = os.path.join('./logs', 'train_epoch_'+str(epoch) + '.png')
+        visulization(targets, predictions, path=path, ratio=0.05)
 
 
 def test(test_loader, model, criterion, epoch=0, mode='test'):
@@ -114,12 +124,15 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
 
         targets.extend(target.view(-1).detach())
         predictions.extend(output.view(-1).detach())
+        
+        if mode == 'test':
+            args.writer.add_scalar('expriment' + mode + 'loss', loss, i)
+            args.writer.add_scalar('training loss', loss_test.item(), args.feq * args.iteration)
 
-    progress.display(i)
-    if mode == 'test':
-        print("targets: ", targets)
-        print("predictions: ", predictions)
-        visulization(targets, predictions, ratio=0.05)
+    if args.rank == 0:
+        progress.display(i)
+        path = os.path.join('./logs', mode+'_epoch_' + str(epoch) + '.png')
+        visulization(targets, predictions, path=path, ratio=0.05, show=False)
 
 
 def data_init(args):
@@ -165,7 +178,26 @@ def debug(features_test, targets_test):
     visulization(targets_test, [])
 
 
-if __name__ == "__main__":
+def init_processes(rank, size, args, fn, backend='mpi'):
+    """ Initialize the distributed environment. """
+    dist.init_process_group(backend, init_method="/home/mag0a/mount/Projects/QueueNet", rank=rank, world_size=size)
+    rank = dist.get_rank()
+    world_size = dist.get_world_size()
+    fn(rank, world_size, args)
+
+
+def main(rank, size, args):
+    args.rank = dist.get_rank()
+    args.world_size = int(dist.get_world_size())
+    args.batch_size = int(args.batch_size/args.world_size)
+    args.distributed = args.world_size > 1
+    print("distributed mode: ", args.distributed)
+    main_worker(args.rank, args.world_size, args)
+
+
+def main_worker(rank, size, args):
+    args.writer = SummaryWriter('./logs')
+    args.iteration = 0
     # Load data
     adj, edge_index, features_train, features_val, features_test, \
     targets_train, targets_val, targets_test = data_init(args)
@@ -176,7 +208,7 @@ if __name__ == "__main__":
     # debug(features_val, targets_val)
     # Model and optimizer
     if args.padding:
-        seq_len = args.pre_len+args.tar_len
+        seq_len = args.pre_len + args.tar_len
     else:
         seq_len = args.pre_len
 
@@ -190,10 +222,12 @@ if __name__ == "__main__":
                      adj=adj,
                      mode='GRU')
     else:
-        model = RNN(in_feat=args.node_features*adj.shape[0], out_feat=args.node_features*adj.shape[0], n_layers=2, dropout=args.dropout, mode='GRU')
+        model = RNN(in_feat=args.node_features * adj.shape[0], out_feat=args.node_features * adj.shape[0], n_layers=2,
+                    dropout=args.dropout, mode='GRU')
 
     criterion = nn.MSELoss()
     optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
     if args.cuda:
         model.cuda()
         print("use cuda")
@@ -205,9 +239,21 @@ if __name__ == "__main__":
         train(train_loader, model, criterion, optimizer, epoch)
         test(val_loader, model, criterion, epoch, mode='val')
 
-    print("Optimization Finished!")
-    print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
+    if rank == 0:
+        print("Optimization Finished!")
+        print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
+        test_loader = data_loader(features_test, targets_test, args.batch_size, args)
+        test(test_loader, model, criterion)
 
-    test_loader = data_loader(features_test, targets_test, args.batch_size, args)
-    test(test_loader, model, criterion)
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    args.cuda = not args.no_cuda and torch.cuda.is_available()
+
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if args.cuda:
+        torch.cuda.manual_seed(args.seed)
+        print("use cuda")
+    init_processes(0, 0, args, main, backend='mpi')
 
