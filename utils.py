@@ -282,11 +282,26 @@ def get_losses(target, prediction, method='rmse'):
 
 
 def visulization(target, prediction, path='./', ratio=0.2, show=False):
-    import matplotlib.pyplot as plt
     target_index = np.arange(1, len(target), int(1/ratio))
     prediction_index = np.arange(1, len(prediction), int(1 / ratio))
-    plt.plot(np.array(target)[target_index], 'r^-')
-    plt.plot(np.array(prediction)[prediction_index], 'b')
-    plt.savefig(path)
+    data = {'target': np.array(target)[target_index], 'prediction': np.array(prediction)[prediction_index]}
+    with open(path+'.pkl', 'wb') as f:
+        pickle.dump(data, f)
     if show:
+        import matplotlib.pyplot as plt
+        plt.plot(np.array(target)[target_index], 'r^-')
+        plt.plot(np.array(prediction)[prediction_index], 'b')
+        plt.savefig(path+'.png')
         plt.show()
+
+
+if __name__ == '__main__':
+    path = './logs/train/GRU_train_epoch_15'
+    with open(path+'.pkl', 'rb') as f:
+        data = pickle.load(f)
+
+    import matplotlib.pyplot as plt
+    plt.plot(data['target'], 'r^-')
+    plt.plot(data['prediction'], 'b')
+    plt.savefig(path+'.png')
+    plt.show()

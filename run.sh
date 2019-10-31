@@ -11,5 +11,4 @@
 #OpenMP settings:
 
 
-mpirun -np 60 --mca btl_tcp_if_include enp97s0f1 python ./main.py
-
+mpirun -np 60 --mca btl_tcp_if_include enp97s0f1 python ./main_cpu.py --epochs 40 --lr 0.1

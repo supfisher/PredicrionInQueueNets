@@ -60,7 +60,7 @@ def mul_tree_queue(weight, height, entry):
     return adja_list, edge_list
 
 
-def gen_queue(weight, height, entry):
+def gen_tree(weight, height, entry):
     if weight == 1:
         return line_queue(height, entry)
     elif weight == 2:
@@ -70,14 +70,14 @@ def gen_queue(weight, height, entry):
 
 
 def rate(t):
-    return 0.05 + 0.35 * np.sin(np.pi * t / 2)**2
+    return 5 + 35 * np.sin(np.pi * t / 2)**2
 
 
 def arr_f(t):
-    return qt.poisson_random_measure(t, rate, 0.4)
+    return qt.poisson_random_measure(t, rate, 4)
 
 def ser_f(t):
-    return t + np.random.exponential(15)
+    return t + np.random.exponential(0.3/args.weight)
 
 
 def graph2queue(adja_list, edge_list, args):
@@ -88,7 +88,7 @@ def graph2queue(adja_list, edge_list, args):
     q_args = {
         1: {
             'arrival_f': arr_f,
-            'service_f': lambda t: t+np.random.exponential(1),
+            'service_f': lambda t: t+np.random.exponential(0.1),
             'AgentFactory': qt.GreedyAgent
         },
         2: {
@@ -99,7 +99,7 @@ def graph2queue(adja_list, edge_list, args):
     }
     for i in range(3, args.height+2):
         q_args[i] = {'num_servers': 3,
-                        'service_f': lambda t: t + np.random.exponential(15*((i-1)*(args.weight-1)+1)),
+                        'service_f': lambda t: t + np.random.exponential(0.3*(args.weight**(i-3))),
                         'AgentFactory': qt.GreedyAgent}
     print("q_args: ", q_args)
     g = qt.adjacency2graph(adjacency=adja_list, edge_type=edge_list)
@@ -139,7 +139,7 @@ def queue_show(qn, args):
             else:
                 pos[v] = [0, 0.4*(args.height-v)]
     qn.g.set_pos(pos)
-    qn.draw(figsize=(pow(args.weight, args.height), len(qn.g.nodes())))
+    qn.draw(figsize=(args.weight*args.height*5, len(qn.g.nodes())))
 
 
 def data2csv(data_list, path):
@@ -186,14 +186,16 @@ def adj_dict2mat(adja_list, num_nodes):
     return mat
 
 
-def edge_adj2mat(OutEdgeView, valid_edges=None):
-    """generate an adjcent matrix from the queue"""
-    edges = [e for e in OutEdgeView if e[0] != e[1]]
-    mat = np.zeros((len(edges), len(edges)))
-    for i, edge_in in enumerate(edges):
-        for j, edge_out in enumerate(edges):
-            if edge_in[1] == edge_out[0] and edge_in[1] in valid_edges and edge_out[0] in valid_edges:
-                mat[i, j] = 1
+def edge_adj2mat(g, valid_edges):
+    """generate an adjcent matrix from the graph and constraint on valid edges"""
+    edges = [e for e in g.edges() if e[0] != e[1]]
+    mat = np.zeros([g.number_of_edges(), g.number_of_edges()])
+    for edge_in in edges:
+        edge_in_id = g.edge_index[edge_in]
+        for edge_out in edges:
+            edge_out_id = g.edge_index[edge_out]
+            if edge_in[1] == edge_out[0] and edge_in_id in valid_edges and edge_out_id in valid_edges:
+                mat[edge_in_id, edge_out_id] = 1
     return mat
 
 
@@ -203,27 +205,45 @@ def queue_data_dict2mat(data_dic):
         mat.extend(v)
     return mat
 
+
+def gene_queue(args):
+    qn = None
+    file_head = ''
+    if args.shape == 'tree':
+        adja_list, edge_list = gen_tree(args.weight, args.height, entry)
+        print(adja_list)
+        print(edge_list)
+        qn = graph2queue(adja_list, edge_list, args)
+        file_head = 'weight_'+str(weight)+'_height_'+str(height)
+    elif args.shape == 'pagerank':
+        g = qt.generate_pagerank_graph(100, seed=13)
+        qn = qt.QueueNetwork(g, seed=14)
+        file_head = 'pagerank'
+    return qn, file_head
+
+
 if __name__=='__main__':
     args = parser.parse_args()
-    weight = 1
-    height = 5
+    weight = 2
+    height = 4
     entry = (0, 1)
     args.weight = weight
     args.height = height
-    adja_list, edge_list = gen_queue(weight, height, entry)
-    print(adja_list)
-    print(edge_list)
-    qn = graph2queue(adja_list, edge_list, args)
-    queue_show(qn, args)
-    data = queue_simu(qn, args, use_queue=True, t=100000)
+    args.shape = 'pagerank'
+    qn, file_head = gene_queue(args)
 
-    data = simplfy_data(data, limit_num=100, use_queue=True)
-    valid_edges = set(data[:, -1])
-    print("valid_edges: ", valid_edges)
-    adjn_mat = adj_dict2mat(adja_list, len(qn.g.nodes()))
-    print(qn.g.edges())
-    adjq_mat = edge_adj2mat(qn.g.edges(), valid_edges)
+    all_queues = qn.edge2queue
+    # queue_show(qn, args)
+    data = queue_simu(qn, args, use_queue=True, n=90000)
+
+    data = simplfy_data(data, limit_num=150, use_queue=True)
+    valid_queues = set(data[:, -1])
+
+    print("length of valid queues: ", len(list(valid_queues)))
+    print("length of valid data: ", len(data))
+    print("length of edges: ", qn.g.number_of_edges())
+    adjq_mat = edge_adj2mat(qn.g, valid_queues)
     # queue_mat = queue_data_dict2mat(data)
-    data2csv(adjq_mat, 'weight_'+str(weight)+'_height_'+str(height)+'_adj.csv')
+    data2csv(adjq_mat, file_head+'_adj.csv')
 
-    data2csv(data, 'weight_'+str(weight)+'_height_'+str(height)+'_agent'+'_queue.csv')
+    data2csv(data, file_head+'_queue.csv')

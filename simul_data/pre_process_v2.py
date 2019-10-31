@@ -157,7 +157,7 @@ def slide_data(data, order=3, processed=True):
     targets = np.zeros((len(data) - start_index, 4)) ## we record the (q_id, arrv_time, service_time, response time)
     targets_dic = {}
 
-    num_threads = 32
+    num_threads = 40
     index_ranges = np.arange(0, len(arv_array)-start_index, int((len(arv_array)-start_index)/num_threads))
     threads = []
     queues = [mp.Manager().Queue() for _ in range(num_threads-1)]
@@ -207,16 +207,20 @@ def data2pickle(data_dic, path):
 
 if __name__=='__main__':
     weight = 2
-    height = 3
+    height = 4
 
-    data = load_data('weight_'+str(weight)+'_height_'+str(height)+'_agent_queue.csv')
-    data = data[int(len(data)/4):]
-    features, features_dict, targets, targets_dic, q_ids = slide_data(data, order=3)
-    print("valid queue ids: ", q_ids)
-    print(features.shape)
-    adj = load_data('weight_' + str(weight) + '_height_' + str(height) + '_adj.csv')
+    file_head = 'weight_'+str(weight)+'_height_'+str(height)
+    file_head = 'pagerank'
+
+    data = load_data(file_head+'_queue.csv')
+    features, features_dict, targets, targets_dic, q_ids = slide_data(data, order=2)
+    print("length of valid queues: ", len(q_ids))
+    print('shape of extracted features: ', features.shape)
+    adj = load_data(file_head + '_adj.csv')
     adj += adj.T
+    print('shape of original adj: ', adj.shape)
     adj = adj[q_ids][:, q_ids]
+    print('shape of processed adj: ', adj.shape)
 
     data2pickle(features_dict, './features.pkl')
     data2csv(adj, './adj.csv')
