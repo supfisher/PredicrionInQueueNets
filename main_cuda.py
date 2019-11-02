@@ -1,20 +1,17 @@
-from models.model import *
+from models import *
 from utils import *
 import time
 import argparse
 import numpy as np
-import torch.distributed as dist
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from tensorboardX import SummaryWriter
+import torch.backends.cudnn as cudnn
 import os
-
 
 # Training settings
 parser = argparse.ArgumentParser()
-parser.add_argument('--no-cuda', action='store_true', default=True,
-                    help='Disables CUDA training.')
 parser.add_argument('--shuffle', action='store_true', default=True,
                     help='Whether to shuffle the dataset.')
 parser.add_argument('--graphlib', action='store_true', default=False,
@@ -22,7 +19,7 @@ parser.add_argument('--graphlib', action='store_true', default=False,
 parser.add_argument('--padding', action='store_true', default=False,
                     help='Whether to padding the input. If yes, the seq_len of RNN model==pre_len_tar_len')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=120,
+parser.add_argument('--epochs', type=int, default=30,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.01,
                     help='Initial learning rate.')
@@ -41,17 +38,6 @@ parser.add_argument('--batch_size', type=int, default=7200,
 parser.add_argument('--feq', type=int, default=30,
                     help='frequency to show the accuracy.')
 
-""" Gradient averaging. """
-
-
-def average_gradients(model):
-    size = float(dist.get_world_size())
-    for param in model.parameters():
-        dist.all_reduce(param.grad.data, op=dist.reduce_op.SUM)
-        param.grad.data /= size
-    for param in model.parameters():
-        dist.broadcast(param.data, src=0)
-
 
 def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     batch_time = AverageMeter('Time', ':6.3f')
@@ -61,33 +47,28 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
     progress = ProgressMeter(
         100,
         [batch_time, data_time, losses, train_losses],
-        prefix=mode + "_Epoch: [{}]".format(epoch))
+        prefix=mode+"_Epoch: [{}]".format(epoch))
 
     t = time.time()
     model.train()
     targets = []
     predictions = []
     for i, (data, target) in enumerate(train_loader):
-
         output, hn = model(data)
-        output = output[-args.tar_len:].reshape(args.batch_size * args.tar_len, -1)
-        target = target[-args.tar_len:].reshape(args.batch_size * args.tar_len, -1)
+        output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
+        target = target[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
         loss_train = criterion(output, target)
 
         loss_train.backward()
-        # for name, params in model.named_parameters():
-        #     print(name, ": grad: ", params.grad.data)
-        #     print(name, ": data: ", params.data)
-        average_gradients(model)
         optimizer.step()
         optimizer.zero_grad()
 
-        loss = get_losses(target, output, method='rmse')
+        loss = get_losses(target.cpu(), output.cpu(), method='rmse')
         losses.update(loss, output.shape[0])
         train_losses.update(loss_train.item(), args.batch_size)
         if i % args.feq == 0 and args.rank == 0:
-            args.writer.add_scalar(args.file_head + 'expriment loss', loss, args.feq * args.train_iter)
-            args.writer.add_scalar(args.file_head + 'training loss', loss_train.item(), args.feq * args.train_iter)
+            args.writer.add_scalar(args.file_head+'expriment loss', loss, args.feq*args.train_iter)
+            args.writer.add_scalar(args.file_head+'training loss', loss_train.item(), args.feq*args.train_iter)
             args.train_iter += 1
             progress.display(i)
 
@@ -106,11 +87,11 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':6.3f')
-    test_losses = AverageMeter(mode + ' Loss', ':.4f')
+    test_losses = AverageMeter(mode+' Loss', ':.4f')
     progress = ProgressMeter(
         100,
         [batch_time, data_time, losses, test_losses],
-        prefix=mode + "_Epoch: [{}]".format(epoch))
+        prefix=mode+"_Epoch: [{}]".format(epoch))
 
     t = time.time()
     model.eval()
@@ -118,34 +99,35 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
     predictions = []
     for i, (data, target) in enumerate(test_loader):
         output, hn = model(data)
-        output = output[-args.tar_len:].reshape(args.batch_size * args.tar_len, -1)
-        target = target[-args.tar_len:].reshape(args.batch_size * args.tar_len, -1)
+        output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
+        target = target[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
         loss_test = criterion(output, target)
         test_losses.update(loss_test.item(), args.batch_size)
-        loss = get_losses(target, output, method='rmse')
+        loss = get_losses(target.cpu(), output.cpu(), method='rmse')
         losses.update(loss, 1)
 
         targets.extend(target.view(-1).detach())
         predictions.extend(output.view(-1).detach())
-
+        
         if mode == 'test' and args.rank == 0:
-            args.writer.add_scalar(args.file_head + mode + 'expriment loss', loss, i)
-            args.writer.add_scalar(args.file_head + mode + 'training loss', loss_test.item(), args.feq * args.test_iter)
+            args.writer.add_scalar(args.file_head+mode + 'expriment loss', loss, i)
+            args.writer.add_scalar(args.file_head+mode + 'training loss', loss_test.item(), args.feq * args.test_iter)
             args.test_iter += 1
-    if args.rank == 0:
-        progress.display(i)
-        dir = os.path.join('./logs', mode)
-        if not os.path.isdir(dir):
-            os.system('mkdir ' + dir)
-        path = os.path.join(dir, args.file_head + mode + '_epoch_' + str(epoch))
-        visulization(targets, predictions, path=path, ratio=0.05, show=False)
+
+        if i % args.feq == 0 and args.rank == 0:
+            progress.display(i)
+            dir = os.path.join('./logs', mode)
+            if not os.path.isdir(dir):
+                os.system('mkdir ' + dir)
+            path = os.path.join(dir, args.file_head+mode+'_epoch_' + str(epoch))
+            visulization(targets, predictions, path=path, ratio=0.05, show=False)
 
 
 def data_init(args):
     adj, edge_index, features, targets = load_path()
     adj = torch.tensor(adj).float()
 
-    features_train, features_val, features_test, targets_train, targets_val, targets_test \
+    features_train, features_val, features_test, targets_train, targets_val, targets_test\
         = train_test_split(features, targets, ratio=(0.5, 0.3,))
     features_train, features_val, features_test = torch.tensor(features_train).float(), torch.tensor(
         features_val).float(), torch.tensor(features_test).float()
@@ -184,27 +166,8 @@ def debug(features_test, targets_test):
     visulization(targets_test, [])
 
 
-def init_processes(rank, size, args, fn, backend='mpi'):
-    """ Initialize the distributed environment. """
-    if backend == 'mpi':  # cpu
-        dist.init_process_group(backend, init_method="/home/mag0a/mount/Projects/QueueNet", rank=rank, world_size=size)
-
-    rank = dist.get_rank()
-    world_size = dist.get_world_size()
-    fn(rank, world_size, args)
-
-
-def main(rank, size, args):
-    args.rank = dist.get_rank()
-    print("my rank is: ", rank)
-    args.world_size = int(dist.get_world_size())
-    args.batch_size = int(args.batch_size / args.world_size)
-    args.distributed = args.world_size > 1
-    print("distributed mode: ", args.distributed)
-    main_worker(args.rank, args.world_size, args)
-
-
-def main_worker(rank, size, args):
+def main_worker(args):
+    global best_acc1
     if args.rank == 0:
         args.writer = SummaryWriter('./logs')
         args.train_iter = 0
@@ -212,7 +175,6 @@ def main_worker(rank, size, args):
     # Load data
     adj, edge_index, features_train, features_val, features_test, \
     targets_train, targets_val, targets_test = data_init(args)
-
     args.edge_index = edge_index
     train_loader, val_loader, test_loader = None, None, None
     # debug(features_test, targets_test)
@@ -228,7 +190,7 @@ def main_worker(rank, size, args):
                      out_feat=args.node_features,
                      G_hidden=3,
                      seq_len=seq_len,
-                     n_layers=5,
+                     n_layers=2,
                      dropout=args.dropout,
                      adj=adj,
                      mode='GRU')
@@ -236,12 +198,13 @@ def main_worker(rank, size, args):
         model = RNN(in_feat=args.node_features * adj.shape[0], out_feat=args.node_features * adj.shape[0], n_layers=2,
                     dropout=args.dropout, mode='GRU')
 
+    model = torch.nn.DataParallel(model).cuda()
+
     criterion = nn.MSELoss()
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay, momentum=args.momentum)
 
     t_total = time.time()
     for epoch in range(args.epochs):
-        adjust_learning_rate(optimizer, epoch, args)
         train_loader = data_loader(features_train, targets_train, args.batch_size, args)
         val_loader = data_loader(features_val, targets_val, args.batch_size, args)
         train(train_loader, model, criterion, optimizer, epoch)
@@ -252,28 +215,18 @@ def main_worker(rank, size, args):
         print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
         test_loader = data_loader(features_test, targets_test, args.batch_size, args)
         test(test_loader, model, criterion)
-        os.system('spd-say "your program is finished"')
-
-
-def adjust_learning_rate(optimizer, epoch, args):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = args.lr * (0.1 ** (epoch // 10))
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    args.cuda = not args.no_cuda and torch.cuda.is_available()
-
+    args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    args.cuda = torch.cuda.is_available()
+    print("device: ", args.device)
+    args.rank = 0
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
-    if args.cuda:
-        torch.cuda.manual_seed(args.seed)
-        print("use cuda")
     if args.graphlib:
         args.file_head = 'graph_GRU_'
     else:
         args.file_head = 'GRU_'
-    init_processes(0, 0, args, main, backend='mpi')
-
+    main_worker(args)

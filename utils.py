@@ -71,12 +71,9 @@ def train_test_split(features, targets, ratio=(0.7, 0, ), sample_rate=None, cons
     features_val = [features[i] for i in times[val_index]]
     features_test = [features[i] for i in times[test_index]]
 
-    targets_train = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
-                     times[train_index]]
-    targets_val = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
-                   times[val_index]]
-    targets_test = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in
-                    times[test_index]]
+    targets_train = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in times[train_index]]
+    targets_val = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in times[val_index]]
+    targets_test = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in times[test_index]]
 
     # targets_train = [targets[i][Id['q_id']] for i in
     #                  times[0: int(len(times) * ratio[0])]]
@@ -140,7 +137,7 @@ def generate_targets(targets, pre_len, tar_len, args):
 #         for j, id in enumerate(orders_chunk):
 #             data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
 #
-#         yield data_batch, target_batch
+#         yield use_cuda(data_batch, target_batch, args.cuda)
 
 
 def use_cuda(data_batch, target_batch, use_cuda):
@@ -268,7 +265,7 @@ def accuracy(output, target):
 
 def get_losses(target, prediction, method='rmse'):
     with torch.no_grad():
-        if target.shape==prediction.shape:
+        if target.shape == prediction.shape:
             target = target.reshape(-1)
             prediction = prediction.reshape(-1)
             if method == 'rmse':
@@ -296,7 +293,7 @@ def visulization(target, prediction, path='./', ratio=0.2, show=False):
 
 
 if __name__ == '__main__':
-    path = './logs/train/GRU_train_epoch_15'
+    path = './logs/train/GRU_train_epoch_20'
     with open(path+'.pkl', 'rb') as f:
         data = pickle.load(f)
 

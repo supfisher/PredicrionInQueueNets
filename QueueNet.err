@@ -1,1891 +1,240 @@
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Matplotlib is building the font cache using fc-list. This may take a moment.
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760747.kw60632'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760747.kw60632'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60631'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60631'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
-Traceback (most recent call last):
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 51, in open_file
-    factory = REGISTERED_FACTORIES[prefix]
-KeyError: './logs/events.out.tfevents.1571760768.kw60634'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "./main.py", line 256, in <module>
-    init_processes(0, 0, args, main, backend='mpi')
-  File "./main.py", line 184, in init_processes
-    fn(rank, world_size, args)
-  File "./main.py", line 193, in main
-    main_worker(args.rank, args.world_size, args)
-  File "./main.py", line 197, in main_worker
-    args.writer = SummaryWriter('./logs')
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 257, in __init__
-    self._get_file_writer()
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 321, in _get_file_writer
-    **self.kwargs)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/writer.py", line 93, in __init__
-    logdir, max_queue, flush_secs, filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 107, in __init__
-    self._logdir, "events"), filename_suffix)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/event_file_writer.py", line 43, in __init__
-    self._py_recordio_writer = RecordWriter(self._file_name)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 113, in __init__
-    self._writer = open_file(path)
-  File "/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/tensorboardX/record_writer.py", line 54, in open_file
-    return open(path, 'wb')
-PermissionError: [Errno 13] Permission denied: './logs/events.out.tfevents.1571760768.kw60634'
---------------------------------------------------------------------------
-Primary job  terminated normally, but 1 process returned
-a non-zero exit code. Per user-direction, the job has been aborted.
---------------------------------------------------------------------------
---------------------------------------------------------------------------
-mpirun detected that one or more processes exited with non-zero status, thus causing
-the job to be terminated. The first process to do so was:
-
-  Process name: [[40289,1],28]
-  Exit code:    1
---------------------------------------------------------------------------
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "
+/home/mag0a/mount/Projects/QueueNet/utils.py:93: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  data = torch.tensor(data)
+/home/mag0a/mount/Softwares/anaconda3/envs/mount_python_mpi/lib/python3.7/site-packages/torch/distributed/distributed_c10d.py:100: UserWarning: torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead
+  warnings.warn("torch.distributed.reduce_op is deprecated, please use "

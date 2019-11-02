@@ -1,60 +1,474 @@
+my rank is:  0
+distributed mode:  True
+my rank is:  12
+distributed mode:  True
+my rank is:  15
+distributed mode:  True
+my rank is:  16
+distributed mode:  True
+my rank is:  1
+distributed mode:  True
+my rank is:  9
+distributed mode:  True
+my rank is:  10
+distributed mode:  True
+my rank is:  2
+distributed mode:  True
+my rank is:  13
+my rank is:  5
+my rank is:  7
+distributed mode:  True
+my rank is:  8
+distributed mode:  True
+distributed mode:  True
+my rank is:  6
+distributed mode:  True
+distributed mode:  True
+my rank is:  17
+my rank is:  4
+my rank is:  11
+distributed mode:  True
+my rank is:  3
 distributed mode:  True
 distributed mode:  True
 distributed mode:  True
+my rank is:  14
+distributed mode:  True
+my rank is:  19
+distributed mode:  True
+my rank is:  51
+distributed mode:  True
+my rank is:  18
+distributed mode:  True
+my rank is:  42
+distributed mode:  True
+my rank is:  55
+distributed mode:  True
+my rank is:  59
+distributed mode:  True
+my rank is:  41
+distributed mode:  True
+my rank is:  40
+distributed mode:  True
+my rank is:  44
+distributed mode:  True
+my rank is:  48
+distributed mode:  True
+my rank is:  24
+distributed mode:  True
+my rank is:  57
+distributed mode:  True
+my rank is:  26
+distributed mode:  True
+my rank is:  43
+distributed mode:  True
+my rank is:  29
+distributed mode:  True
+my rank is:  45
+distributed mode:  True
+my rank is:  30
+distributed mode:  True
+my rank is:  46
+distributed mode:  True
+my rank is:  36
+distributed mode:  True
+my rank is:  47
+distributed mode:  True
+my rank is:  38
+distributed mode:  True
+my rank is:  49
+distributed mode:  True
+my rank is:  20
+my rank is:  50
+distributed mode:  True
+my rank is:  23
+distributed mode:  True
+my rank is:  52
+distributed mode:  True
+my rank is:  25
+distributed mode:  True
+my rank is:  53
+distributed mode:  True
+my rank is:  28
+distributed mode:  True
+my rank is:  54
+distributed mode:  True
+my rank is:  31
+distributed mode:  True
+my rank is:  56
+distributed mode:  True
+my rank is:  32
+distributed mode:  True
+my rank is:  58
+distributed mode:  True
+my rank is:  37
+distributed mode:  True
+my rank is:  39
+distributed mode:  True
+my rank is:  21
+distributed mode:  True
+my rank is:  22
 distributed mode:  True
 distributed mode:  True
+my rank is:  27
 distributed mode:  True
+my rank is:  33
 distributed mode:  True
+my rank is:  34
 distributed mode:  True
+my rank is:  35
 distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
-distributed mode:  True
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+featues_train shape:  torch.Size([34651, 5, 6])
+targets_train shape:  torch.Size([34651, 1])
+train_Epoch: [0][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   1.12 (  1.12)	Training Loss 1.2573 (1.2573)
+train_Epoch: [0][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   1.35 (  0.93)	Training Loss 1.8204 (0.8925)
+train_Epoch: [0][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.82 (  0.93)	Training Loss 0.6797 (0.8902)
+train_Epoch: [0][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   1.29 (  0.92)	Training Loss 1.6667 (0.8791)
+train_Epoch: [0][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   1.19 (  0.92)	Training Loss 1.4148 (0.8889)
+train_Epoch: [0][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.98 (  0.90)	Training Loss 0.9515 (0.8562)
+train_Epoch: [0][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.74 (  0.91)	Training Loss 0.5482 (0.8713)
+train_Epoch: [0][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.83 (  0.91)	Training Loss 0.6871 (0.8725)
+train_Epoch: [0][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.98 (  0.90)	Training Loss 0.9680 (0.8583)
+train_Epoch: [0][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.61 (  0.90)	Training Loss 0.3712 (0.8583)
+val_Epoch: [0][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.753 ( 0.782)	val Loss 0.5667 (0.6412)
+train_Epoch: [1][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.95 (  0.95)	Training Loss 0.8937 (0.8937)
+train_Epoch: [1][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.76 (  0.84)	Training Loss 0.5796 (0.7544)
+train_Epoch: [1][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.93 (  0.83)	Training Loss 0.8573 (0.7348)
+train_Epoch: [1][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.92 (  0.86)	Training Loss 0.8458 (0.7751)
+train_Epoch: [1][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.97 (  0.86)	Training Loss 0.9328 (0.7759)
+train_Epoch: [1][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.85)	Training Loss 0.4555 (0.7615)
+train_Epoch: [1][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.68 (  0.85)	Training Loss 0.4558 (0.7559)
+train_Epoch: [1][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.91 (  0.85)	Training Loss 0.8353 (0.7580)
+train_Epoch: [1][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.83 (  0.84)	Training Loss 0.6924 (0.7476)
+train_Epoch: [1][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.74 (  0.84)	Training Loss 0.5408 (0.7396)
+val_Epoch: [1][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.548 ( 0.681)	val Loss 0.3008 (0.4847)
+train_Epoch: [2][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   1.02 (  1.02)	Training Loss 1.0306 (1.0306)
+train_Epoch: [2][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.85 (  0.83)	Training Loss 0.7226 (0.7258)
+train_Epoch: [2][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.82 (  0.81)	Training Loss 0.6661 (0.6939)
+train_Epoch: [2][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.77 (  0.80)	Training Loss 0.5989 (0.6724)
+train_Epoch: [2][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.79)	Training Loss 0.2898 (0.6621)
+train_Epoch: [2][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.75 (  0.78)	Training Loss 0.5666 (0.6443)
+train_Epoch: [2][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.66 (  0.78)	Training Loss 0.4354 (0.6372)
+train_Epoch: [2][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.76 (  0.77)	Training Loss 0.5710 (0.6219)
+train_Epoch: [2][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.68 (  0.77)	Training Loss 0.4654 (0.6260)
+train_Epoch: [2][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.80 (  0.76)	Training Loss 0.6353 (0.6174)
+val_Epoch: [2][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.406 ( 0.586)	val Loss 0.1650 (0.3686)
+train_Epoch: [3][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.57)	Training Loss 0.3217 (0.3217)
+train_Epoch: [3][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.59 (  0.77)	Training Loss 0.3466 (0.6245)
+train_Epoch: [3][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.91 (  0.75)	Training Loss 0.8216 (0.6006)
+train_Epoch: [3][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.72)	Training Loss 0.4521 (0.5464)
+train_Epoch: [3][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.71)	Training Loss 0.2150 (0.5406)
+train_Epoch: [3][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.59 (  0.71)	Training Loss 0.3483 (0.5329)
+train_Epoch: [3][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.70)	Training Loss 0.4462 (0.5229)
+train_Epoch: [3][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.82 (  0.70)	Training Loss 0.6704 (0.5222)
+train_Epoch: [3][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.40 (  0.70)	Training Loss 0.1581 (0.5209)
+train_Epoch: [3][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.70)	Training Loss 0.3208 (0.5252)
+val_Epoch: [3][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.433 ( 0.538)	val Loss 0.1877 (0.3114)
+train_Epoch: [4][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.50)	Training Loss 0.2461 (0.2461)
+train_Epoch: [4][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.94 (  0.66)	Training Loss 0.8805 (0.4640)
+train_Epoch: [4][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.99 (  0.67)	Training Loss 0.9826 (0.4814)
+train_Epoch: [4][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.65 (  0.67)	Training Loss 0.4165 (0.4822)
+train_Epoch: [4][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   1.15 (  0.67)	Training Loss 1.3329 (0.4789)
+train_Epoch: [4][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.67)	Training Loss 0.2956 (0.4833)
+train_Epoch: [4][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.32 (  0.67)	Training Loss 0.1034 (0.4816)
+train_Epoch: [4][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.59 (  0.67)	Training Loss 0.3526 (0.4754)
+train_Epoch: [4][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.66)	Training Loss 0.4534 (0.4656)
+train_Epoch: [4][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.78 (  0.66)	Training Loss 0.6149 (0.4644)
+val_Epoch: [4][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.502 ( 0.530)	val Loss 0.2522 (0.3004)
+train_Epoch: [5][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.57)	Training Loss 0.3250 (0.3250)
+train_Epoch: [5][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.58 (  0.65)	Training Loss 0.3402 (0.4462)
+train_Epoch: [5][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.84 (  0.67)	Training Loss 0.6999 (0.4727)
+train_Epoch: [5][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.66)	Training Loss 0.2107 (0.4692)
+train_Epoch: [5][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.64)	Training Loss 0.2465 (0.4431)
+train_Epoch: [5][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.64)	Training Loss 0.2145 (0.4428)
+train_Epoch: [5][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.90 (  0.65)	Training Loss 0.8145 (0.4480)
+train_Epoch: [5][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.64)	Training Loss 0.3212 (0.4434)
+train_Epoch: [5][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.41 (  0.64)	Training Loss 0.1653 (0.4442)
+train_Epoch: [5][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.53 (  0.64)	Training Loss 0.2795 (0.4391)
+val_Epoch: [5][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.454 ( 0.498)	val Loss 0.2058 (0.2656)
+train_Epoch: [6][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.66 (  0.66)	Training Loss 0.4422 (0.4422)
+train_Epoch: [6][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.64 (  0.67)	Training Loss 0.4142 (0.4737)
+train_Epoch: [6][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.65)	Training Loss 0.2530 (0.4512)
+train_Epoch: [6][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.89 (  0.64)	Training Loss 0.7958 (0.4359)
+train_Epoch: [6][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.55 (  0.64)	Training Loss 0.2991 (0.4277)
+train_Epoch: [6][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.62 (  0.63)	Training Loss 0.3875 (0.4198)
+train_Epoch: [6][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.60 (  0.63)	Training Loss 0.3585 (0.4116)
+train_Epoch: [6][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.52 (  0.62)	Training Loss 0.2750 (0.4048)
+train_Epoch: [6][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.80 (  0.62)	Training Loss 0.6383 (0.4072)
+train_Epoch: [6][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.62)	Training Loss 0.4498 (0.4054)
+val_Epoch: [6][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.504 ( 0.490)	val Loss 0.2541 (0.2580)
+train_Epoch: [7][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.86 (  0.86)	Training Loss 0.7474 (0.7474)
+train_Epoch: [7][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.59)	Training Loss 0.2921 (0.3746)
+train_Epoch: [7][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.55 (  0.58)	Training Loss 0.3025 (0.3605)
+train_Epoch: [7][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.71 (  0.59)	Training Loss 0.5030 (0.3703)
+train_Epoch: [7][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.48 (  0.59)	Training Loss 0.2287 (0.3751)
+train_Epoch: [7][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.66 (  0.61)	Training Loss 0.4409 (0.3932)
+train_Epoch: [7][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.52 (  0.61)	Training Loss 0.2734 (0.3966)
+train_Epoch: [7][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.69 (  0.61)	Training Loss 0.4728 (0.3938)
+train_Epoch: [7][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.42 (  0.60)	Training Loss 0.1732 (0.3904)
+train_Epoch: [7][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.60)	Training Loss 0.4484 (0.3881)
+val_Epoch: [7][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.633 ( 0.475)	val Loss 0.4008 (0.2384)
+train_Epoch: [8][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.44 (  0.44)	Training Loss 0.1952 (0.1952)
+train_Epoch: [8][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.68 (  0.62)	Training Loss 0.4584 (0.4061)
+train_Epoch: [8][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.62)	Training Loss 0.2931 (0.4009)
+train_Epoch: [8][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.71 (  0.61)	Training Loss 0.5012 (0.3923)
+train_Epoch: [8][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.34 (  0.61)	Training Loss 0.1134 (0.3936)
+train_Epoch: [8][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.35 (  0.61)	Training Loss 0.1193 (0.3905)
+train_Epoch: [8][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.60)	Training Loss 0.2633 (0.3824)
+train_Epoch: [8][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.61 (  0.60)	Training Loss 0.3661 (0.3780)
+train_Epoch: [8][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.36 (  0.59)	Training Loss 0.1271 (0.3723)
+train_Epoch: [8][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.59)	Training Loss 0.2901 (0.3694)
+val_Epoch: [8][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.417 ( 0.458)	val Loss 0.1740 (0.2258)
+train_Epoch: [9][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.57)	Training Loss 0.3195 (0.3195)
+train_Epoch: [9][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.47 (  0.59)	Training Loss 0.2162 (0.3747)
+train_Epoch: [9][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.58)	Training Loss 0.2545 (0.3651)
+train_Epoch: [9][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.58)	Training Loss 0.3302 (0.3633)
+train_Epoch: [9][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.42 (  0.58)	Training Loss 0.1777 (0.3594)
+train_Epoch: [9][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.58)	Training Loss 0.2574 (0.3582)
+train_Epoch: [9][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.38 (  0.57)	Training Loss 0.1407 (0.3506)
+train_Epoch: [9][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.41 (  0.57)	Training Loss 0.1709 (0.3444)
+train_Epoch: [9][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.53 (  0.56)	Training Loss 0.2811 (0.3419)
+train_Epoch: [9][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.49 (  0.57)	Training Loss 0.2368 (0.3428)
+val_Epoch: [9][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.534 ( 0.467)	val Loss 0.2852 (0.2364)
+train_Epoch: [10][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.44 (  0.44)	Training Loss 0.1920 (0.1920)
+train_Epoch: [10][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.42 (  0.54)	Training Loss 0.1773 (0.3189)
+train_Epoch: [10][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.71 (  0.52)	Training Loss 0.5021 (0.2960)
+train_Epoch: [10][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.66 (  0.54)	Training Loss 0.4363 (0.3116)
+train_Epoch: [10][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.42 (  0.54)	Training Loss 0.1781 (0.3197)
+train_Epoch: [10][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.60 (  0.55)	Training Loss 0.3648 (0.3309)
+train_Epoch: [10][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.43 (  0.55)	Training Loss 0.1860 (0.3251)
+train_Epoch: [10][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.34 (  0.55)	Training Loss 0.1162 (0.3217)
+train_Epoch: [10][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.55)	Training Loss 0.2634 (0.3221)
+train_Epoch: [10][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.60 (  0.55)	Training Loss 0.3618 (0.3201)
+val_Epoch: [10][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.465 ( 0.480)	val Loss 0.2164 (0.2438)
+train_Epoch: [11][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.53 (  0.53)	Training Loss 0.2770 (0.2770)
+train_Epoch: [11][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.55)	Training Loss 0.2114 (0.3184)
+train_Epoch: [11][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.44 (  0.56)	Training Loss 0.1913 (0.3354)
+train_Epoch: [11][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.65 (  0.56)	Training Loss 0.4254 (0.3258)
+train_Epoch: [11][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.55)	Training Loss 0.2892 (0.3178)
+train_Epoch: [11][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.54)	Training Loss 0.2114 (0.3109)
+train_Epoch: [11][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.37 (  0.55)	Training Loss 0.1398 (0.3159)
+train_Epoch: [11][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.55)	Training Loss 0.3231 (0.3215)
+train_Epoch: [11][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.42 (  0.55)	Training Loss 0.1766 (0.3275)
+train_Epoch: [11][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.80 (  0.56)	Training Loss 0.6371 (0.3303)
+val_Epoch: [11][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.336 ( 0.443)	val Loss 0.1131 (0.2117)
+train_Epoch: [12][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.39 (  0.39)	Training Loss 0.1511 (0.1511)
+train_Epoch: [12][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.52)	Training Loss 0.2650 (0.2958)
+train_Epoch: [12][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.55 (  0.53)	Training Loss 0.2980 (0.3025)
+train_Epoch: [12][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.72 (  0.54)	Training Loss 0.5141 (0.3107)
+train_Epoch: [12][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.41 (  0.55)	Training Loss 0.1670 (0.3221)
+train_Epoch: [12][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.89 (  0.55)	Training Loss 0.7915 (0.3178)
+train_Epoch: [12][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.62 (  0.54)	Training Loss 0.3845 (0.3087)
+train_Epoch: [12][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.71 (  0.54)	Training Loss 0.4991 (0.3076)
+train_Epoch: [12][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.44 (  0.54)	Training Loss 0.1946 (0.3091)
+train_Epoch: [12][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.72 (  0.54)	Training Loss 0.5115 (0.3111)
+val_Epoch: [12][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.420 ( 0.440)	val Loss 0.1767 (0.2085)
+train_Epoch: [13][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.58 (  0.58)	Training Loss 0.3418 (0.3418)
+train_Epoch: [13][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.40 (  0.54)	Training Loss 0.1566 (0.3004)
+train_Epoch: [13][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.48 (  0.53)	Training Loss 0.2347 (0.2951)
+train_Epoch: [13][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.63 (  0.52)	Training Loss 0.3962 (0.2929)
+train_Epoch: [13][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.53)	Training Loss 0.2486 (0.2989)
+train_Epoch: [13][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.59 (  0.54)	Training Loss 0.3522 (0.3112)
+train_Epoch: [13][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.52 (  0.54)	Training Loss 0.2749 (0.3059)
+train_Epoch: [13][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.53)	Training Loss 0.2504 (0.2984)
+train_Epoch: [13][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.69 (  0.53)	Training Loss 0.4716 (0.2988)
+train_Epoch: [13][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.90 (  0.53)	Training Loss 0.8087 (0.3021)
+val_Epoch: [13][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.326 ( 0.438)	val Loss 0.1064 (0.2082)
+train_Epoch: [14][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.29 (  0.29)	Training Loss 0.0830 (0.0830)
+train_Epoch: [14][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.41 (  0.49)	Training Loss 0.1711 (0.2508)
+train_Epoch: [14][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.59 (  0.50)	Training Loss 0.3539 (0.2647)
+train_Epoch: [14][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.82 (  0.52)	Training Loss 0.6768 (0.2877)
+train_Epoch: [14][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.52 (  0.53)	Training Loss 0.2676 (0.2978)
+train_Epoch: [14][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.32 (  0.53)	Training Loss 0.1011 (0.2989)
+train_Epoch: [14][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.61 (  0.53)	Training Loss 0.3739 (0.2956)
+train_Epoch: [14][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.55 (  0.52)	Training Loss 0.2978 (0.2904)
+train_Epoch: [14][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.36 (  0.52)	Training Loss 0.1286 (0.2926)
+train_Epoch: [14][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.52)	Training Loss 0.2493 (0.2912)
+val_Epoch: [14][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.339 ( 0.439)	val Loss 0.1152 (0.2082)
+train_Epoch: [15][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.44 (  0.44)	Training Loss 0.1910 (0.1910)
+train_Epoch: [15][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.40 (  0.49)	Training Loss 0.1577 (0.2549)
+train_Epoch: [15][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.52)	Training Loss 0.4551 (0.2825)
+train_Epoch: [15][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.51)	Training Loss 0.2472 (0.2782)
+train_Epoch: [15][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.52)	Training Loss 0.2623 (0.2862)
+train_Epoch: [15][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.52)	Training Loss 0.2074 (0.2945)
+train_Epoch: [15][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.38 (  0.53)	Training Loss 0.1469 (0.2980)
+train_Epoch: [15][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.52)	Training Loss 0.2887 (0.2904)
+train_Epoch: [15][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.63 (  0.52)	Training Loss 0.3932 (0.2873)
+train_Epoch: [15][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.52)	Training Loss 0.2585 (0.2889)
+val_Epoch: [15][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.502 ( 0.439)	val Loss 0.2518 (0.2079)
+train_Epoch: [16][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.58 (  0.58)	Training Loss 0.3390 (0.3390)
+train_Epoch: [16][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.35 (  0.50)	Training Loss 0.1250 (0.2599)
+train_Epoch: [16][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.49 (  0.51)	Training Loss 0.2380 (0.2727)
+train_Epoch: [16][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.38 (  0.51)	Training Loss 0.1421 (0.2764)
+train_Epoch: [16][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.51)	Training Loss 0.2627 (0.2736)
+train_Epoch: [16][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.48 (  0.51)	Training Loss 0.2273 (0.2793)
+train_Epoch: [16][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.51)	Training Loss 0.2910 (0.2747)
+train_Epoch: [16][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.75 (  0.52)	Training Loss 0.5573 (0.2833)
+train_Epoch: [16][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.68 (  0.52)	Training Loss 0.4665 (0.2840)
+train_Epoch: [16][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.36 (  0.52)	Training Loss 0.1262 (0.2854)
+val_Epoch: [16][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.246 ( 0.419)	val Loss 0.0604 (0.1922)
+train_Epoch: [17][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.44 (  0.44)	Training Loss 0.1909 (0.1909)
+train_Epoch: [17][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.48 (  0.51)	Training Loss 0.2342 (0.2733)
+train_Epoch: [17][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.52 (  0.52)	Training Loss 0.2703 (0.2874)
+train_Epoch: [17][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.56 (  0.51)	Training Loss 0.3190 (0.2734)
+train_Epoch: [17][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.51)	Training Loss 0.4444 (0.2795)
+train_Epoch: [17][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.55 (  0.52)	Training Loss 0.3042 (0.2854)
+train_Epoch: [17][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.51)	Training Loss 0.2887 (0.2785)
+train_Epoch: [17][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.66 (  0.51)	Training Loss 0.4295 (0.2745)
+train_Epoch: [17][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.48 (  0.51)	Training Loss 0.2317 (0.2751)
+train_Epoch: [17][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.61 (  0.51)	Training Loss 0.3682 (0.2743)
+val_Epoch: [17][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.325 ( 0.426)	val Loss 0.1058 (0.1946)
+train_Epoch: [18][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.46)	Training Loss 0.2161 (0.2161)
+train_Epoch: [18][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.54 (  0.51)	Training Loss 0.2921 (0.2689)
+train_Epoch: [18][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.58 (  0.51)	Training Loss 0.3356 (0.2757)
+train_Epoch: [18][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.39 (  0.51)	Training Loss 0.1527 (0.2719)
+train_Epoch: [18][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.68 (  0.51)	Training Loss 0.4600 (0.2763)
+train_Epoch: [18][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.51 (  0.50)	Training Loss 0.2558 (0.2712)
+train_Epoch: [18][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.49 (  0.50)	Training Loss 0.2369 (0.2682)
+train_Epoch: [18][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.50)	Training Loss 0.3263 (0.2681)
+train_Epoch: [18][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.38 (  0.50)	Training Loss 0.1461 (0.2686)
+train_Epoch: [18][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.41 (  0.50)	Training Loss 0.1717 (0.2679)
+val_Epoch: [18][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.393 ( 0.432)	val Loss 0.1542 (0.2020)
+train_Epoch: [19][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.61 (  0.61)	Training Loss 0.3683 (0.3683)
+train_Epoch: [19][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.69 (  0.52)	Training Loss 0.4697 (0.2863)
+train_Epoch: [19][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.59 (  0.52)	Training Loss 0.3476 (0.2870)
+train_Epoch: [19][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.58 (  0.51)	Training Loss 0.3376 (0.2758)
+train_Epoch: [19][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.61 (  0.51)	Training Loss 0.3728 (0.2796)
+train_Epoch: [19][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.39 (  0.51)	Training Loss 0.1545 (0.2772)
+train_Epoch: [19][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.42 (  0.50)	Training Loss 0.1735 (0.2713)
+train_Epoch: [19][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.46 (  0.50)	Training Loss 0.2159 (0.2699)
+train_Epoch: [19][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.25 (  0.50)	Training Loss 0.0616 (0.2667)
+train_Epoch: [19][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.57 (  0.50)	Training Loss 0.3237 (0.2650)
+val_Epoch: [19][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.253 ( 0.414)	val Loss 0.0642 (0.1835)
+train_Epoch: [20][  0/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.48 (  0.48)	Training Loss 0.2342 (0.2342)
+train_Epoch: [20][ 30/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.59 (  0.50)	Training Loss 0.3474 (0.2599)
+train_Epoch: [20][ 60/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.67 (  0.49)	Training Loss 0.4473 (0.2541)
+train_Epoch: [20][ 90/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.43 (  0.50)	Training Loss 0.1877 (0.2689)
+train_Epoch: [20][120/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.55 (  0.50)	Training Loss 0.3057 (0.2648)
+train_Epoch: [20][150/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.50 (  0.50)	Training Loss 0.2514 (0.2657)
+train_Epoch: [20][180/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.44 (  0.50)	Training Loss 0.1962 (0.2609)
+train_Epoch: [20][210/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.28 (  0.49)	Training Loss 0.0770 (0.2596)
+train_Epoch: [20][240/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.49 (  0.50)	Training Loss 0.2431 (0.2614)
+train_Epoch: [20][270/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss   0.41 (  0.50)	Training Loss 0.1712 (0.2651)
+val_Epoch: [20][172/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.446 ( 0.400)	val Loss 0.1993 (0.1722)
+Optimization Finished!
+Total time elapsed: 338.6673s
+test_Epoch: [0][114/100]	Time  0.000 ( 0.000)	Data  0.000 ( 0.000)	Loss  0.599 ( 0.361)	test Loss 0.3590 (0.1404)

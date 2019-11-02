@@ -157,7 +157,7 @@ def slide_data(data, order=3, processed=True):
     targets = np.zeros((len(data) - start_index, 4)) ## we record the (q_id, arrv_time, service_time, response time)
     targets_dic = {}
 
-    num_threads = 40
+    num_threads = 120
     index_ranges = np.arange(0, len(arv_array)-start_index, int((len(arv_array)-start_index)/num_threads))
     threads = []
     queues = [mp.Manager().Queue() for _ in range(num_threads-1)]
@@ -178,8 +178,9 @@ def slide_data(data, order=3, processed=True):
         }
         q.put(kwargs)
         t = Slide_data_thread(i, q)
-        t.start()
         threads.append(t)
+    for t in threads:
+        t.start()
     for t in threads:
         t.join()
     for i, t in enumerate(threads):
@@ -206,11 +207,11 @@ def data2pickle(data_dic, path):
 
 
 if __name__=='__main__':
-    weight = 2
-    height = 4
+    weight = 1
+    height = 5
 
     file_head = 'weight_'+str(weight)+'_height_'+str(height)
-    file_head = 'pagerank'
+    # file_head = 'pagerank'
 
     data = load_data(file_head+'_queue.csv')
     features, features_dict, targets, targets_dic, q_ids = slide_data(data, order=2)

@@ -160,7 +160,7 @@ def simplfy_data(data_agent, limit_num=100, use_queue=True):
         simple_data = []
         for v in data_agent[0]:
             if v[Index.departure.value] > 0:
-                simple_data.append(v)
+                simple_data.append([float('%.4f'%data) for data in v])
         simple_data = np.array(simple_data)
         q_ids = simple_data[:,-1]
         counter = Counter(q_ids)
@@ -224,17 +224,17 @@ def gene_queue(args):
 
 if __name__=='__main__':
     args = parser.parse_args()
-    weight = 2
-    height = 4
+    weight = 1
+    height = 5
     entry = (0, 1)
     args.weight = weight
     args.height = height
-    args.shape = 'pagerank'
+    args.shape = 'tree'
     qn, file_head = gene_queue(args)
 
     all_queues = qn.edge2queue
     # queue_show(qn, args)
-    data = queue_simu(qn, args, use_queue=True, n=90000)
+    data = queue_simu(qn, args, use_queue=True, n=20000)
 
     data = simplfy_data(data, limit_num=150, use_queue=True)
     valid_queues = set(data[:, -1])

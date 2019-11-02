@@ -1,14 +1,13 @@
 #!/bin/bash
-#SBATCH --ntasks-per-node=20
-#SBATCH -N 3
+#SBATCH -N 1
 #SBATCH -J QueueNet
 #SBATCH -o QueueNet.out
 #SBATCH -e QueueNet.err
 #SBATCH --time=59:00
-
+#SBATCH --gres=gpu:gtx2080ti
 
 #run the application:
 #OpenMP settings:
 
 
-mpirun -np 60 --mca btl_tcp_if_include enp97s0f1 python ./main_cpu.py --epochs 21 --lr 0.1
+python ./main_cuda.py --epochs 21 --lr 0.1
