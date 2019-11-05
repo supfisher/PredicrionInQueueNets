@@ -1,6 +1,6 @@
 import numpy as np
 import random
-import scipy.sparse as sp
+from sklearn import metrics
 import torch
 import pickle
 import pandas as pd
@@ -8,7 +8,7 @@ import os
 import math
 from torch_geometric.data import Data, Batch
 from enum import Enum
-
+import shutil
 
 class Index(Enum):
     arrival = 0
@@ -36,16 +36,28 @@ def normalizationMat(A):
     return torch.mm(torch.mm(D, A), D)
 
 
-def load_path(path="./simul_data"):
+def load_raw_path(path="./simul_data", data_split=True):
     """load dataset from path
     adj is a matrix, features is a dict with times as key, and [n_nodes, 3] for each value"""
     adj = pd.read_csv(os.path.join(path, 'adj.csv'))
     adj = np.array(adj.values)
     edge_index = adjMat2edgeIndex(adj)
-    with open(os.path.join(path, 'features.pkl'), 'rb') as f:
-        features = pickle.load(f)
-    with open(os.path.join(path, 'targets.pkl'), 'rb') as f:
-        targets = pickle.load(f)
+    features = {}
+    targets = {}
+    if not data_split:
+        with open(os.path.join(path, 'features.pkl'), 'rb') as f:
+            features = pickle.load(f)
+        with open(os.path.join(path, 'targets.pkl'), 'rb') as f:
+            targets = pickle.load(f)
+    else:
+        for i in range(300):
+            print("reading file: ", path, 'features.pkl'+'ws_'+str(300)+'rank_'+str(i))
+            with open(os.path.join(path, 'features.pkl'+'ws_'+str(300)+'rank_'+str(i)), 'rb') as f:
+                features_i = pickle.load(f)
+                features = {**features, **features_i}
+            with open(os.path.join(path, 'targets.pkl'+'ws_'+str(300)+'rank_'+str(i)), 'rb') as f:
+                targets_i = pickle.load(f)
+                targets = {**targets, **targets_i}
     return adj, edge_index, features, targets
 
 
@@ -83,6 +95,19 @@ def train_test_split(features, targets, ratio=(0.7, 0, ), sample_rate=None, cons
     #                 times[int(len(times) * (ratio[0] + ratio[1])):]]
 
     return features_train, features_val, features_test, targets_train, targets_val, targets_test
+
+
+def load_dataset(path="./simul_data"):
+    features_train = torch.load(os.path.join(path, 'features_train.pkl'))
+    features_val = torch.load(os.path.join(path, 'features_val.pkl'))
+    features_test = torch.load(os.path.join(path, 'features_test.pkl'))
+    targets_train = torch.load(os.path.join(path, 'targets_train.pkl'))
+    targets_val = torch.load(os.path.join(path, 'targets_val.pkl'))
+    targets_test = torch.load(os.path.join(path, 'targets_test.pkl'))
+    adj = pd.read_csv(os.path.join(path, 'adj.csv'))
+    adj = np.array(adj.values)
+    edge_index = adjMat2edgeIndex(adj)
+    return adj, edge_index, features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
 def normalization(data, mu=None, std=None):
@@ -176,16 +201,19 @@ def data_loader(features, targets, batch_size, args):
         if args.graphlib:
             for j, id in enumerate(orders_chunk):
                 for k in range(args.pre_len):
-                    d = Data(x=features[id + k, :, :], edge_index=args.edge_index)
+                    x, edge_index = use_cuda(features[id + k, :, :], args.edge_index, args.cuda)
+                    d = Data(x=x, edge_index=edge_index)
                     features_batch[k].append(d)
             for k in range(args.pre_len):
                 data_batch.append(Batch.from_data_list(features_batch[k]))
+
+            yield data_batch, target_batch
         else:
             data_batch = torch.zeros(pre_len, args.batch_size, args.num_nodes, args.node_features)
             for j, id in enumerate(orders_chunk):
                 data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
 
-        yield use_cuda(data_batch, target_batch, args.cuda)
+            yield use_cuda(data_batch, target_batch, args.cuda)
 
 
 class AverageMeter(object):
@@ -229,6 +257,12 @@ class ProgressMeter(object):
         return '[' + fmt + '/' + fmt.format(num_batches) + ']'
 
 
+def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
+    torch.save(state, filename)
+    if is_best:
+        shutil.copyfile(filename, 'model_best.pth.tar')
+
+
 def rmse(y_pre, y_true):
     inputs = y_pre - y_true
     return np.linalg.norm(inputs, ord=2)/math.sqrt(len(inputs))
@@ -263,18 +297,33 @@ def accuracy(output, target):
     return 1-correct_k.mul_(1 / batch_size).squeeze()
 
 
-def get_losses(target, prediction, method='rmse'):
+# def get_losses(target, prediction, method='rmse'):
+#     with torch.no_grad():
+#         if target.shape == prediction.shape:
+#             target = target.reshape(-1)
+#             prediction = prediction.reshape(-1)
+#             if method == 'rmse':
+#                 return rmse(prediction, target)
+#             elif method == 'mae':
+#                 return mae(prediction, target)
+#             elif method == 'mare':
+#                 return mare(prediction, target)
+#         else:
+#             return accuracy(prediction, target)
+
+
+def evaluation(target, prediction, method='rmse'):
     with torch.no_grad():
-        if target.shape == prediction.shape:
-            target = target.reshape(-1)
-            prediction = prediction.reshape(-1)
-            if method == 'rmse':
-                return rmse(prediction, target)
-            elif method == 'mae':
-                return mae(prediction, target)
-            elif method == 'mare':
-                return mare(prediction, target)
-        else:
+        if method == 'roc':
+            fpr, tpr, thresholds = metrics.roc_curve(target, prediction, pos_label=2)
+            return metrics.auc(fpr, tpr)
+        elif method == 'rmse':
+            return rmse(prediction, target)
+        elif method == 'mae':
+            return mae(prediction, target)
+        elif method == 'mare':
+            return mare(prediction, target)
+        elif method == 'accu':
             return accuracy(prediction, target)
 
 
@@ -293,12 +342,13 @@ def visulization(target, prediction, path='./', ratio=0.2, show=False):
 
 
 if __name__ == '__main__':
-    path = './logs/train/GRU_train_epoch_20'
-    with open(path+'.pkl', 'rb') as f:
-        data = pickle.load(f)
-
-    import matplotlib.pyplot as plt
-    plt.plot(data['target'], 'r^-')
-    plt.plot(data['prediction'], 'b')
-    plt.savefig(path+'.png')
-    plt.show()
+    # path = './logs/train/GRU_train_epoch_20'
+    # with open(path+'.pkl', 'rb') as f:
+    #     data = pickle.load(f)
+    #
+    # import matplotlib.pyplot as plt
+    # plt.plot(data['target'], 'r^-')
+    # plt.plot(data['prediction'], 'b')
+    # plt.savefig(path+'.png')
+    # plt.show()
+    evaluation()

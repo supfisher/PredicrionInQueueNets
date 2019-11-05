@@ -152,12 +152,11 @@ def slide_data(data, order=3, processed=True):
 
     orders_list = [binary_search(arv_array, arv_arrays[i][order]) for i in range(num_nodes)]
     start_index = max(orders_list)
-    features = np.zeros((len(data) - start_index, num_nodes, order*2+2)) #features are sorted by how many arrived but not served
     features_dict = {}
     targets = np.zeros((len(data) - start_index, 4)) ## we record the (q_id, arrv_time, service_time, response time)
     targets_dic = {}
 
-    num_threads = 120
+    num_threads = 30
     index_ranges = np.arange(0, len(arv_array)-start_index, int((len(arv_array)-start_index)/num_threads))
     threads = []
     queues = [mp.Manager().Queue() for _ in range(num_threads-1)]
@@ -185,12 +184,11 @@ def slide_data(data, order=3, processed=True):
         t.join()
     for i, t in enumerate(threads):
         t_features, t_features_dict, t_targets, t_targets_dic = t.q.get()
-        features[index_ranges[i]:index_ranges[i+1]] = t_features
         features_dict = {**features_dict, **t_features_dict}
         targets[index_ranges[i]:index_ranges[i+1]] = t_targets
         targets_dic = {**targets_dic, **t_targets_dic}
 
-    return features, features_dict, targets, targets_dic, q_ids
+    return features_dict, targets, targets_dic, q_ids
 
 
 def data2csv(data_list, path):
@@ -214,9 +212,8 @@ if __name__=='__main__':
     # file_head = 'pagerank'
 
     data = load_data(file_head+'_queue.csv')
-    features, features_dict, targets, targets_dic, q_ids = slide_data(data, order=2)
+    features_dict, targets, targets_dic, q_ids = slide_data(data, order=2)
     print("length of valid queues: ", len(q_ids))
-    print('shape of extracted features: ', features.shape)
     adj = load_data(file_head + '_adj.csv')
     adj += adj.T
     print('shape of original adj: ', adj.shape)

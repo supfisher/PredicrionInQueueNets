@@ -82,7 +82,7 @@ def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
         optimizer.step()
         optimizer.zero_grad()
 
-        loss = get_losses(target, output, method='rmse')
+        loss = evaluation(target, output, method='rmse')
         losses.update(loss, output.shape[0])
         train_losses.update(loss_train.item(), args.batch_size)
         if i % args.feq == 0 and args.rank == 0:
@@ -122,7 +122,7 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
         target = target[-args.tar_len:].reshape(args.batch_size * args.tar_len, -1)
         loss_test = criterion(output, target)
         test_losses.update(loss_test.item(), args.batch_size)
-        loss = get_losses(target, output, method='rmse')
+        loss = evaluation(target, output, method='rmse')
         losses.update(loss, 1)
 
         targets.extend(target.view(-1).detach())
@@ -142,7 +142,7 @@ def test(test_loader, model, criterion, epoch=0, mode='test'):
 
 
 def data_init(args):
-    adj, edge_index, features, targets = load_path()
+    adj, edge_index, features, targets = load_raw_path()
     adj = torch.tensor(adj).float()
 
     features_train, features_val, features_test, targets_train, targets_val, targets_test \
@@ -224,19 +224,20 @@ def main_worker(rank, size, args):
         seq_len = args.pre_len
 
     if args.graphlib:
+        G_model = VAE
         model = TGCN(in_feat=args.node_features,
                      out_feat=args.node_features,
-                     G_hidden=3,
-                     seq_len=seq_len,
-                     n_layers=5,
+                     G_model=G_model, G_hidden=1, G_latent=1,
+                     n_layers=2,
                      dropout=args.dropout,
-                     adj=adj,
+                     edge_index=edge_index,
                      mode='GRU')
+        criterion = MyLoss()
     else:
         model = RNN(in_feat=args.node_features * adj.shape[0], out_feat=args.node_features * adj.shape[0], n_layers=2,
                     dropout=args.dropout, mode='GRU')
+        criterion = nn.MSELoss()
 
-    criterion = nn.MSELoss()
     optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     t_total = time.time()
