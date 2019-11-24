@@ -1,14 +1,10 @@
 #!/bin/bash
-#SBATCH --ntasks-per-node=20
-#SBATCH -N 3
-#SBATCH -J QueueNet
-#SBATCH -o QueueNet.out
-#SBATCH -e QueueNet.err
-#SBATCH --time=59:00
+
+sbatch run_rnn_l1.sh
+sbatch run_rnn_l2.sh
+sbatch run_seq2seq_l1.sh
+sbatch run_seq2seq_l2.sh
+sbatch run_graphSeq2Seq_l1.sh
+sbatch run_graphSeq2Seq_l2.sh
 
 
-#run the application:
-#OpenMP settings:
-
-
-mpirun -np 60 --mca btl_tcp_if_include enp97s0f1 python ./main_cpu.py --epochs 21 --lr 0.1

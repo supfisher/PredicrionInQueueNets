@@ -34,7 +34,7 @@ class GraphConvolution(Module):
     Simple GCN layer, similar to https://arxiv.org/abs/1609.02907
     """
 
-    def __init__(self, in_features, out_features, bias=False):
+    def __init__(self, in_features, out_features, bias=True):
         super(GraphConvolution, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -52,9 +52,10 @@ class GraphConvolution(Module):
             self.bias.data.uniform_(-init_range, init_range)
 
     def forward(self, x, adj):
-        support = SparseMM()(x, self.weight)
-        # support = torch.mm(x, self.weight)
-        output = SparseMM()(adj, support)
+#         support = SparseMM()(x, self.weight)
+        support = torch.mm(x, self.weight)
+#         output = SparseMM()(adj, support)
+        output = torch.mm(adj, support)
         if self.bias is not None:
             return output + self.bias
         else:
@@ -65,3 +66,4 @@ class GraphConvolution(Module):
         return self.__class__.__name__ + ' (' \
                + str(self.in_features) + ' -> ' \
                + str(self.out_features) + ')'
+

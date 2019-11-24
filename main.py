@@ -1,245 +1,213 @@
-from model import *
+from models import *
 from utils import *
+from pytools import *
 import time
 import argparse
 import numpy as np
-import torch.distributed as dist
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from tensorboardX import SummaryWriter
 import torch.backends.cudnn as cudnn
-import torch.multiprocessing as mp
-import warnings
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
 
 # Training settings
 parser = argparse.ArgumentParser()
-parser.add_argument('--no-cuda', action='store_true', default=True,
-                    help='Disables CUDA training.')
 parser.add_argument('--shuffle', action='store_true', default=True,
                     help='Whether to shuffle the dataset.')
-parser.add_argument('--graphlib', action='store_true', default=False,
-                    help='Whether to use the torch_geometric graph lib.')
-parser.add_argument('--padding', action='store_true', default=False,
-                    help='Whether to padding the input. If yes, the seq_len of RNN model==pre_len_tar_len')
+parser.add_argument('--file_head', type=str, default='RNN',
+                    help='which regression model to use.')
+parser.add_argument('--show', action='store_true', default=False,
+                    help='whether to show the result.')
+parser.add_argument('--resume', action='store_true', default=False,
+                    help='whether to load the stored model')
+parser.add_argument('--early_stop', action='store_true', default=True,
+                    help='whether to stop training early')
+parser.add_argument('--loss', type=str, default='l1',
+                    help='which loss function to use.')
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=120,
+parser.add_argument('--start_epoch', type=int, default=0,
+                    help='the start epoch.')
+parser.add_argument('--epochs', type=int, default=80,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=0.1,
+parser.add_argument('--lr', type=float, default=0.001,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=5e-4,
                     help='Weight decay (L2 loss on parameters).')
+parser.add_argument('--momentum', type=float, default=0.9,
+                    help='momentum.')
 parser.add_argument('--hidden', type=int, default=2,
                     help='Number of hidden units.')
 parser.add_argument('--dropout', type=float, default=0.2,
                     help='Dropout rate (1 - keep probability).')
-parser.add_argument('--pre_len', type=int, default=5,
+parser.add_argument('--pre_len', type=int, default=10,
                     help='the length of input data sequence.')
-parser.add_argument('--tar_len', type=int, default=1,
+parser.add_argument('--tar_len', type=int, default=3,
                     help='the length of output target sequence.')
-parser.add_argument('--batch_size', type=int, default=1200,
-                    help='the batch size.')
+parser.add_argument('--batch_size', type=int, default=256,
+                    help='training batch size.')
+parser.add_argument('--val_batch_size', type=int, default=256,
+                    help='validation and test batch size.')
 parser.add_argument('--feq', type=int, default=30,
                     help='frequency to show the accuracy.')
 
 
+def forward(data, observ_data, adj1, observ_adj1, target, observ_target, criterion, model, observ=True):
+    if args.file_head == 'Seq2Seq':
+        output, shift_out, shift_in = model(data, observ_data, observ_target, observ=observ)
+        # output_ = output.reshape(-1, 1)
+        # target_ = target.reshape(-1, 1)
+        output_ = output[-args.tar_len:].reshape(-1, 1)
+        target_ = target[-args.tar_len:].reshape(-1, 1)
+        loss = criterion(output_, target_, shift_out, shift_in, args.loss)
+        return output, loss
 
 
+    elif args.file_head == 'graphSeq2Seq':
+        output, shift_out, shift_in = model(data, observ_data, adj1, observ_adj1, observ=observ)
+        # output_ = output.reshape(-1, 1)
+        # target_ = target.reshape(-1, 1)
+        output_ = output[-args.tar_len:].reshape(-1, 1)
+        target_ = target[-args.tar_len:].reshape(-1, 1)
+        loss = criterion(output_, target_, shift_out, shift_in, args.loss)
+        return output, loss
 
-""" Gradient averaging. """
-def average_gradients(model):
-    size = float(dist.get_world_size())
-    for param in model.parameters():
-        dist.all_reduce(param.grad.data, op=dist.reduce_op.SUM)
-        param.grad.data /= size
-    for param in model.parameters():
-        dist.broadcast(param.data, src=0)
+    elif args.file_head == 'RNN':
+        output = model(data)
+        # output_ = output.reshape(-1, 1)
+        target_ = target.reshape(-1, 1)
+        output_ = output[-args.tar_len:].reshape(-1, 1)
+        # target_ = target[-args.tar_len:].reshape(-1, 1)
+        loss = criterion(output_, target_, args.loss)
+        return output, loss
 
-def train(train_loader, model, criterion, optimizer, epoch, mode='train'):
+
+def train(train_loader, model, criterion, optimizer, epoch, mode='train', args=None):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
-    losses = AverageMeter('Loss', ':6.2f')
-    train_losses = AverageMeter('Training Loss', ':.4f')
+    rmse = AverageMeter('rmse', ':6.5f')
+    mae = AverageMeter('mae', ':6.5f')
+    train_losses = AverageMeter('Training Loss', ':.5f')
     progress = ProgressMeter(
         100,
-        [batch_time, data_time, losses, train_losses],
-        prefix=mode+"_Epoch: [{}]".format(epoch))
+        [batch_time, data_time, train_losses, rmse, mae],
+        prefix=mode + "_Epoch: [{}]".format(epoch))
 
     t = time.time()
     model.train()
     targets = []
     predictions = []
-    for i, (data, target) in enumerate(train_loader):
-        output, hn = model(data)
-        output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
-        target = target[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
-        loss_train = criterion(output, target)
+    adj = args.adj
+    for i, (data, observ_data, adj1, observ_adj1, target, observ_target) in enumerate(train_loader):
+        output, loss_train = forward(data, observ_data, adj1, observ_adj1,
+                                     target, observ_target, criterion, model, observ=False)
 
         loss_train.backward()
-        # for name, params in model.named_parameters():
-        #     print(name, ": grad: ", params.grad.data)
-        #     print(name, ": data: ", params.data)
-        average_gradients(model)
+
         optimizer.step()
+
         optimizer.zero_grad()
 
-        loss = get_losses(target, output, method='rmse')
-        losses.update(loss, output.shape[0])
-        train_losses.update(loss_train.item(), args.batch_size)
+        target = target[-args.tar_len:].view(-1)
+        output = output[-args.tar_len:].view(-1)
+
+        rmse.update(evaluation(target, output, method='rmse'), output.shape[0])
+        mae.update(evaluation(target, output, method='mae'), output.shape[0])
+
+        train_losses.update(loss_train.item(), output.shape[0])
+
+        targets.extend(target.detach())
+        predictions.extend(output.detach())
+
         if i % args.feq == 0 and args.rank == 0:
-            args.writer.add_scalar(args.file_head+'expriment loss', loss, args.feq*args.train_iter)
-            args.writer.add_scalar(args.file_head+'training loss', loss_train.item(), args.feq*args.train_iter)
+            args.writer.add_scalar(args.file_head + mode + 'rmse', rmse.avg, args.feq * args.train_iter)
+            args.writer.add_scalar(args.file_head + mode + 'mae', mae.avg, args.feq * args.train_iter)
+
+            args.writer.add_scalar(args.file_head + mode + 'training loss', train_losses.avg, args.feq * args.train_iter)
             args.train_iter += 1
             progress.display(i)
 
-        targets.extend(target.view(-1).detach())
-        predictions.extend(output.view(-1).detach())
+    print('train_epoch: ', epoch, 'rmse',
+          evaluation(torch.stack(targets), torch.stack(predictions), method='rmse'))
+    print('train_epoch: ', epoch, 'mae',
+          evaluation(torch.stack(targets), torch.stack(predictions), method='mae'))
+    print('train_epoch: ', epoch, 'mad',
+          evaluation(torch.stack(targets), torch.stack(predictions), method='mad'))
+    print('train_epoch: ', epoch, 'R2',
+          evaluation(torch.stack(targets), torch.stack(predictions), method='R2'))
 
-    if epoch % 5 == 0 and args.rank == 0:
+    if epoch % 1 == 0 and args.rank == 0:
         dir = os.path.join('./logs', mode)
         if not os.path.isdir(dir):
             os.system('mkdir ' + dir)
         path = os.path.join(dir, args.file_head + mode + '_epoch_' + str(epoch))
-        visulization(targets, predictions, path=path, ratio=0.05, show=False)
+        visulization(targets, predictions, path=path, ratio=0.1, show=args.show, title=mode + '_epoch: ' + str(epoch))
 
 
-def test(test_loader, model, criterion, epoch=0, mode='test'):
+def test(test_loader, model, criterion, epoch=0, mode='test', args=None):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
-    losses = AverageMeter('Loss', ':6.3f')
-    test_losses = AverageMeter(mode+' Loss', ':.4f')
+    rmse = AverageMeter('rmse', ':6.5f')
+    mae = AverageMeter('mae', ':6.5f')
+    test_losses = AverageMeter(mode + ' Loss', ':.5f')
     progress = ProgressMeter(
         100,
-        [batch_time, data_time, losses, test_losses],
-        prefix=mode+"_Epoch: [{}]".format(epoch))
+        [batch_time, data_time, test_losses, rmse, mae],
+        prefix=mode + "_Epoch: [{}]".format(epoch))
 
     t = time.time()
     model.eval()
     targets = []
     predictions = []
-    for i, (data, target) in enumerate(test_loader):
-        output, hn = model(data)
-        output = output[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
-        target = target[-args.tar_len:].reshape(args.batch_size*args.tar_len, -1)
-        loss_test = criterion(output, target)
-        test_losses.update(loss_test.item(), args.batch_size)
-        loss = get_losses(target, output, method='rmse')
-        losses.update(loss, 1)
+    i = 0
+    adj = args.adj
+    for i, (data, observ_data, adj1, observ_adj1, target, observ_target) in enumerate(test_loader):
 
-        targets.extend(target.view(-1).detach())
-        predictions.extend(output.view(-1).detach())
-        
+        output, loss_test = forward(data, observ_data, adj1,
+                                    observ_adj1, target, observ_target, criterion, model, observ=False)
+
+        target = target[-args.tar_len:].view(-1)
+        output = output[-args.tar_len:].view(-1)
+
+        rmse.update(evaluation(target, output, method='rmse'), output.shape[0])
+        mae.update(evaluation(target, output, method='mae'), output.shape[0])
+
+        test_losses.update(loss_test.item(), output.shape[0])
+
+        targets.extend(target.detach())
+        predictions.extend(output.detach())
+
         if mode == 'test' and args.rank == 0:
-            args.writer.add_scalar(args.file_head+mode + 'expriment loss', loss, i)
-            args.writer.add_scalar(args.file_head+mode + 'training loss', loss_test.item(), args.feq * args.test_iter)
+            args.writer.add_scalar(args.file_head + mode + 'rmse', rmse.avg, args.feq * args.train_iter)
+            args.writer.add_scalar(args.file_head + mode + 'mae', mae.avg, args.feq * args.train_iter)
+
+            args.writer.add_scalar(args.file_head + mode + 'training loss', test_losses.avg, args.feq * args.test_iter)
             args.test_iter += 1
-    if args.rank == 0:
+
+    if epoch % 1 == 0 and args.rank == 0:
         progress.display(i)
+        print('test_epoch: ', epoch, 'rmse',
+              evaluation(torch.stack(targets), torch.stack(predictions), method='rmse'))
+        print('test_epoch: ', epoch, 'mae',
+              evaluation(torch.stack(targets), torch.stack(predictions), method='mae'))
+        print('test_epoch: ', epoch, 'mad',
+              evaluation(torch.stack(targets), torch.stack(predictions), method='mad'))
+        print('test_epoch: ', epoch, 'R2',
+              evaluation(torch.stack(targets), torch.stack(predictions), method='R2'))
+
         dir = os.path.join('./logs', mode)
         if not os.path.isdir(dir):
             os.system('mkdir ' + dir)
-        path = os.path.join(dir, args.file_head+mode+'_epoch_' + str(epoch))
-        visulization(targets, predictions, path=path, ratio=0.05, show=False)
+        path = os.path.join(dir, args.file_head + mode + '_epoch_' + str(epoch))
+        visulization(targets, predictions, path=path, ratio=0.1, show=args.show, title=mode + '_epoch: ' + str(epoch))
 
-
-def data_init(args):
-    adj, edge_index, features, targets = load_path()
-    adj = torch.tensor(adj).float()
-
-    features_train, features_val, features_test, targets_train, targets_val, targets_test\
-        = train_test_split(features, targets, ratio=(0.5, 0.3,))
-    features_train, features_val, features_test = torch.tensor(features_train).float(), torch.tensor(
-        features_val).float(), torch.tensor(features_test).float()
-    targets_train, targets_val, targets_test = torch.tensor(targets_train).float(), torch.tensor(
-        targets_val).float(), torch.tensor(targets_test).float()
-
-    if len(targets_train.shape) == 1:
-        targets_train = targets_train.unsqueeze(1)
-        targets_val = targets_val.unsqueeze(1)
-        targets_test = targets_test.unsqueeze(1)
-
-    targets_train, mu, std = normalization(targets_train)
-    targets_val, _, _ = normalization(targets_val, mu, std)
-    targets_test, _, _ = normalization(targets_test, mu, std)
-
-    features_train, mu, std = normalization(features_train)
-    features_val, _, _ = normalization(features_val, mu, std)
-    features_test, _, _ = normalization(features_test, mu, std)
-
-    print("featues_train shape: ", features_train.shape)
-    print("targets_train shape: ", targets_train.shape)
-    args.num_nodes = features_train.shape[1]
-    assert adj.shape[0] == features_train.shape[1]
-    args.node_features = features_train.shape[2]
-
-    return adj, edge_index, features_train, features_val, features_test, \
-           targets_train, targets_val, targets_test
-
-
-def debug(features_test, targets_test):
-    """debug"""
-    test_loader_debug = data_loader(features_test, targets_test, args.batch_size, args)
-    targets_test = []
-    for i, (data_batch, target_batch) in enumerate(test_loader_debug):
-        targets_test.extend(target_batch.view(-1))
-    visulization(targets_test, [])
+    return test_losses.avg
 
 
 
-def main(args):
-    if args.seed is not None:
-        random.seed(args.seed)
-        torch.manual_seed(args.seed)
-        cudnn.deterministic = True
-        warnings.warn('You have chosen to seed training. '
-                      'This will turn on the CUDNN deterministic setting, '
-                      'which can slow down your training considerably! '
-                      'You may see unexpected behavior when restarting '
-                      'from checkpoints.')
-
-    if args.gpu is not None:
-        warnings.warn('You have chosen a specific GPU. This will completely '
-                      'disable data parallelism.')
-
-    if args.dist_url == "env://" and args.world_size == -1:
-        args.world_size = int(os.environ["WORLD_SIZE"])
-
-    args.distributed = args.world_size > 1 or args.multiprocessing_distributed
-
-    ngpus_per_node = torch.cuda.device_count()
-    if args.multiprocessing_distributed:
-        # Since we have ngpus_per_node processes per node, the total world_size
-        # needs to be adjusted accordingly
-        args.world_size = ngpus_per_node * args.world_size
-        # Use torch.multiprocessing.spawn to launch distributed processes: the
-        # main_worker process function
-        mp.spawn(main_worker, nprocs=ngpus_per_node, args=(ngpus_per_node, args))
-    else:
-        # Simply call main_worker function
-
-        main_worker(args.gpu, ngpus_per_node, args)
-
-
-def main_worker(gpu, ngpus_per_node, args):
-    global best_acc1
-    args.gpu = gpu
-
-    if args.gpu is not None:
-        print("Use GPU: {} for training".format(args.gpu))
-
-    if args.distributed:
-        if args.dist_url == "env://" and args.rank == -1:
-            args.rank = int(os.environ["RANK"])
-        if args.multiprocessing_distributed:
-            # For multiprocessing distributed training, rank needs to be the
-            # global rank among all the processes
-            args.rank = args.rank * ngpus_per_node + gpu
-        dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url,
-                                world_size=args.world_size, rank=args.rank)
-
-
+def main_worker(args):
+    global best_loss
     if args.rank == 0:
         args.writer = SummaryWriter('./logs')
         args.train_iter = 0
@@ -247,63 +215,78 @@ def main_worker(gpu, ngpus_per_node, args):
     # Load data
     adj, edge_index, features_train, features_val, features_test, \
     targets_train, targets_val, targets_test = data_init(args)
-
+    args.adj = adj
+    args.num_nodes = adj.shape[0]
     args.edge_index = edge_index
+    args.adj_shape = adj.shape[0]
     train_loader, val_loader, test_loader = None, None, None
-    # debug(features_test, targets_test)
-    # debug(features_val, targets_val)
-    # Model and optimizer
-    if args.padding:
-        seq_len = args.pre_len + args.tar_len
-    else:
-        seq_len = args.pre_len
 
-    if args.graphlib:
-        model = TGCN(in_feat=args.node_features,
-                     out_feat=args.node_features,
-                     G_hidden=3,
-                     seq_len=seq_len,
-                     n_layers=2,
-                     dropout=args.dropout,
-                     adj=adj,
-                     mode='GRU')
-    else:
-        model = RNN(in_feat=args.node_features * adj.shape[0], out_feat=args.node_features * adj.shape[0], n_layers=2,
-                    dropout=args.dropout, mode='GRU')
+    if 'Seq2Seq' == args.file_head:
+        model = Seq2Seq(in_dim=args.node_features, hid_dim=4, out_dim=2,
+                        n_layers=2, dropout=args.dropout)
+        criterion = Seq2SeqLoss()
 
-    model.cuda()
+    elif 'graphSeq2Seq' == args.file_head:
+        model = GraphSeq2Seq(in_dim=args.node_features, hid_dim=4, out_dim=2,
+                          n_layers=2, adj=adj, dropout=args.dropout)
+        criterion = GraphSeq2SeqLoss()
+        # input = torch.zeros(args.pre_len, args.batch_size, args.node_features-1)
+        # hid = None
+        # args.writer.add_graph(model, input_to_model=[input, hid])
+    elif 'RNN' == args.file_head:
+        model = RNN(in_dim=args.node_features, hid_dim=4,
+                          n_layers=2, dropout=args.dropout)
+        criterion = RNNLoss()
+    model = model.to(args.device)
 
+    # optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay, momentum=args.momentum)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-    criterion = nn.MSELoss()
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-
+    resume_checkpoit(args, model, optimizer, args.resume)
+    # model = torch.nn.DataParallel(model)
+    # model = model.cuda()
 
     t_total = time.time()
-    for epoch in range(args.epochs):
+
+    early_stop = EarlyStopping(patience=5, verbose=True, delta=0, path=args.filename)
+    for epoch in range(args.start_epoch, args.start_epoch + args.epochs):
+        adjust_learning_rate(optimizer, epoch, args)
+
         train_loader = data_loader(features_train, targets_train, args.batch_size, args)
-        val_loader = data_loader(features_val, targets_val, args.batch_size, args)
-        train(train_loader, model, criterion, optimizer, epoch)
-        test(val_loader, model, criterion, epoch, mode='val')
+        val_loader = data_loader(features_val, targets_val, args.val_batch_size, args)
+        train(train_loader, model, criterion, optimizer, epoch, args=args)
+        loss = test(val_loader, model, criterion, epoch, mode='val', args=args)
+        early_stop(loss, model, optimizer, epoch)
+        if args.early_stop and early_stop.early_stop:
+            print("Early stopping")
+            break
 
     if args.rank == 0:
+        resume_checkpoit(args, model, optimizer)
         print("Optimization Finished!")
         print("Total time elapsed: {:.4f}s".format(time.time() - t_total))
         test_loader = data_loader(features_test, targets_test, args.batch_size, args)
-        test(test_loader, model, criterion)
-        os.system('spd-say "your program is finished"')
+        test(test_loader, model, criterion, args=args)
+
+
+def adjust_learning_rate(optimizer, epoch, args):
+    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+    lr = args.lr * (0.1 ** (epoch // 20))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    args.cuda = not args.no_cuda and torch.cuda.is_available()
-
+    args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    args.cuda = torch.cuda.is_available()
+    print("device: ", args.device)
+    args.rank = 0
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if args.cuda:
         torch.cuda.manual_seed(args.seed)
-        print("use cuda")
-    if args.graphlib:
-        args.file_head = 'graph_GRU_'
-    else:
-        args.file_head = 'GRU_'
-    main(args)
+
+    args.dataset = 'pagerank'
+
+    main_worker(args)

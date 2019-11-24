@@ -20,9 +20,13 @@ class Index(Enum):
 
 
 def adjMat2edgeIndex(adj):
-    edgeIndex = torch.tensor(np.where(adj != 0))
+    edgeIndex = torch.tensor(np.where(adj != 0)).long().contiguous()
     assert edgeIndex.shape[0] == 2
-    return edgeIndex
+    eyes = torch.eye(adj.shape[0], adj.shape[1])
+    adj += eyes
+    D = torch.sum(adj, dim=1).diagflat().sqrt()
+    adj = torch.mm(D, torch.mm(adj, D))
+    return edgeIndex, adj
 
 
 def normalizationMat(A):
@@ -36,68 +40,8 @@ def normalizationMat(A):
     return torch.mm(torch.mm(D, A), D)
 
 
-def load_raw_path(path="./simul_data", data_split=True):
-    """load dataset from path
-    adj is a matrix, features is a dict with times as key, and [n_nodes, 3] for each value"""
-    adj = pd.read_csv(os.path.join(path, 'adj.csv'))
-    adj = np.array(adj.values)
-    edge_index = adjMat2edgeIndex(adj)
-    features = {}
-    targets = {}
-    if not data_split:
-        with open(os.path.join(path, 'features.pkl'), 'rb') as f:
-            features = pickle.load(f)
-        with open(os.path.join(path, 'targets.pkl'), 'rb') as f:
-            targets = pickle.load(f)
-    else:
-        for i in range(300):
-            print("reading file: ", path, 'features.pkl'+'ws_'+str(300)+'rank_'+str(i))
-            with open(os.path.join(path, 'features.pkl'+'ws_'+str(300)+'rank_'+str(i)), 'rb') as f:
-                features_i = pickle.load(f)
-                features = {**features, **features_i}
-            with open(os.path.join(path, 'targets.pkl'+'ws_'+str(300)+'rank_'+str(i)), 'rb') as f:
-                targets_i = pickle.load(f)
-                targets = {**targets, **targets_i}
-    return adj, edge_index, features, targets
+def load_dataset(path="../simul_data"):
 
-
-def train_test_split(features, targets, ratio=(0.7, 0, ), sample_rate=None, constant_step=True):
-    """split the loaded features data into train dataset and test dataset
-    features shape: key: times, values: (num_nodes, node_feature)
-    target feature: key: times, values: (target_feature)"""
-    assert sum(ratio) <= 1
-    Id = {'q_id': 0, 'arrival': 1, 'service': 2, 'departure': 3}
-    times = np.array(sorted(list(features.keys())))
-    if sample_rate is not None:
-        if constant_step:
-            index = np.arange(0, len(times), int(1 / sample_rate))
-            times = times[index]
-        else:
-            times = random.sample(times, int(len(times) * sample_rate))
-
-    index = np.arange(len(times))
-    train_index = index[0:int(len(times)*ratio[0])]
-    val_index = index[int(len(times)*ratio[0]):int(len(times)*(ratio[0]+ratio[1]))]
-    test_index = index[int(len(times)*(ratio[0]+ratio[1])):]
-    features_train = [features[i] for i in times[train_index]]
-    features_val = [features[i] for i in times[val_index]]
-    features_test = [features[i] for i in times[test_index]]
-
-    targets_train = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in times[train_index]]
-    targets_val = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in times[val_index]]
-    targets_test = [targets[i][Id['service']] - targets[i][Id['arrival']] for i in times[test_index]]
-
-    # targets_train = [targets[i][Id['q_id']] for i in
-    #                  times[0: int(len(times) * ratio[0])]]
-    # targets_val = [targets[i][Id['q_id']] for i in
-    #                times[int(len(times) * ratio[0]):int(len(times) * (ratio[0] + ratio[1]))]]
-    # targets_test = [targets[i][Id['q_id']] for i in
-    #                 times[int(len(times) * (ratio[0] + ratio[1])):]]
-
-    return features_train, features_val, features_test, targets_train, targets_val, targets_test
-
-
-def load_dataset(path="./simul_data"):
     features_train = torch.load(os.path.join(path, 'features_train.pkl'))
     features_val = torch.load(os.path.join(path, 'features_val.pkl'))
     features_test = torch.load(os.path.join(path, 'features_test.pkl'))
@@ -105,8 +49,10 @@ def load_dataset(path="./simul_data"):
     targets_val = torch.load(os.path.join(path, 'targets_val.pkl'))
     targets_test = torch.load(os.path.join(path, 'targets_test.pkl'))
     adj = pd.read_csv(os.path.join(path, 'adj.csv'))
-    adj = np.array(adj.values)
-    edge_index = adjMat2edgeIndex(adj)
+    adj = torch.tensor(adj.values).float()
+    adj[adj > 0] = 1
+    edge_index, adj = adjMat2edgeIndex(adj)
+
     return adj, edge_index, features_train, features_val, features_test, targets_train, targets_val, targets_test
 
 
@@ -135,85 +81,233 @@ def generate_targets(targets, pre_len, tar_len, args):
     return output
 
 
-# def data_loader(features, targets, batch_size, args):
-#     """features:(len(times), num_nodes, node_feature)
-#     targets: (len(features)-pre_len-tar_len, target_features)
-#     return: (data, target)
-#     data_batch:(pre_len, batch_size, num_nodes, node_feature)
-#     target_batch:(tar_len, batch_size, target_features)"""
-#
-#     pre_len = args.pre_len
-#     tar_len = args.tar_len
-#     shift_len = args.pre_len-1
-#     if args.padding:
-#         pre_len=tar_len=args.pre_len+args.tar_len-1
-#         shift_len = 0
-#
-#     orders = torch.tensor(range(len(features) - args.pre_len - args.tar_len))
-#     if args.shuffle:
-#         orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
-#     for i in range(0, len(orders), batch_size):
-#         data_batch = torch.ones(pre_len, args.batch_size, args.num_nodes, args.node_features)*-1
-#         target_batch = torch.zeros(tar_len, args.batch_size, targets.shape[-1])
-#         orders_chunk = orders[i:min(i + batch_size, len(orders) - 1)]
-#
-#         for j, id in enumerate(orders_chunk):
-#             target_batch[:, j, :] = targets[id+shift_len:id+shift_len+tar_len]
-#         for j, id in enumerate(orders_chunk):
-#             data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
-#
-#         yield use_cuda(data_batch, target_batch, args.cuda)
-
-
-def use_cuda(data_batch, target_batch, use_cuda):
+def use_cuda(data_batch, use_cuda):
     if use_cuda:
-        return data_batch.cuda(), target_batch.cuda()
+        return data_batch.cuda()
     else:
-        return data_batch, target_batch
+        return data_batch
 
 
-def data_loader(features, targets, batch_size, args):
+def data_loader_1q(features, targets, batch_size, args):
     """features:(len(times), num_nodes, node_feature)
     targets: (len(features)-pre_len-tar_len, tar_len, target_features)
     retrun: (data, target)
     data_batch:(pre_len, batch_size, num_nodes, node_feature)
     target_batch:(tar_len, batch_size, target_features)"""
-    pre_len = args.pre_len
-    tar_len = args.tar_len
-    shift_len = args.pre_len - 1
-    if args.padding:
-        pre_len = tar_len = args.pre_len + args.tar_len
-        shift_len = 0
 
     orders = torch.tensor(range(len(features) - args.pre_len - args.tar_len))
     if args.shuffle:
         orders = torch.randperm(len(features) - args.pre_len - args.tar_len)
-    for i in range(0, int(len(orders)/batch_size)*batch_size, batch_size):
-        features_batch = [[] for _ in range(args.pre_len)]
 
-        target_batch = torch.empty(tar_len, args.batch_size, targets.shape[-1])
-        orders_chunk = orders[i: i + batch_size]
+    for i in range(0, len(orders), batch_size):
+        if args.file_head == 'Seq2Seq':
 
-        for j, id in enumerate(orders_chunk):
-            target_batch[:, j, :] = targets[id+shift_len:id+shift_len+tar_len]
+            orders_chunk = orders[i: min(i + batch_size, len(orders))]
 
-        data_batch = []
-        if args.graphlib:
+            data_batch = torch.zeros(args.pre_len, len(orders_chunk), args.node_features)
+            observation_data_batch = torch.zeros(args.tar_len, len(orders_chunk), args.node_features)
+
+            target_batch = torch.zeros(args.pre_len + args.tar_len, len(orders_chunk), targets.shape[-1])
+            observation_target_batch = torch.zeros(args.tar_len, len(orders_chunk), 1)
+
             for j, id in enumerate(orders_chunk):
+                data_batch[0:args.pre_len, j, 0:-1] = features[id:id + args.pre_len, 0:-1].float()
+                data_batch[:, j, -1] = targets[id:id + args.pre_len, 0].float()
+
+                observation_data_batch[:, j, 0:-1] = features[id + args.pre_len:id + args.pre_len+args.tar_len, 0:-1].float()
+                observation_data_batch[:, j, -1] = targets[id + args.pre_len:id + args.pre_len+args.tar_len, 0].float()
+
+                target_batch[:, j, :] = targets[id:id + args.pre_len+args.tar_len]
+                observation_target_batch[:, j, :] = targets[id + args.pre_len:id + args.pre_len+args.tar_len]
+
+            yield use_cuda(data_batch, args.cuda), use_cuda(observation_data_batch, args.cuda), None, None, \
+                  use_cuda(target_batch, args.cuda), use_cuda(observation_target_batch, args.cuda)
+
+        elif args.file_head == 'RNN':
+            orders_chunk = orders[i: min(i + batch_size, len(orders))]
+            target_batch = torch.empty(args.tar_len, len(orders_chunk), targets.shape[-1])
+            orders_chunk = orders[i: i + batch_size]
+
+            data_batch = torch.zeros(args.pre_len, len(orders_chunk), args.node_features)
+            observation_data_batch = torch.zeros(args.tar_len, len(orders_chunk), args.node_features)
+
+            for j, id in enumerate(orders_chunk):
+                data_batch[:, j, 0:-1] = features[id:id + args.pre_len, 0:-1].float()
+                data_batch[:, j, -1] = targets[id:id + args.pre_len, 0].float()
+
+                observation_data_batch[:, j, 0:-1] = features[id + args.pre_len:id + args.pre_len+args.tar_len, 0:-1].float()
+                observation_data_batch[:, j, -1] = targets[id + args.pre_len:id + args.pre_len + args.tar_len, 0].float()
+
+                target_batch[:, j, :] = targets[id + args.pre_len:id + args.pre_len + args.tar_len]
+
+
+            yield use_cuda(data_batch, args.cuda), use_cuda(observation_data_batch, args.cuda), None, None, \
+                  use_cuda(target_batch, args.cuda), None
+
+
+        elif args.file_head == 'graphSeq2Seq':
+            orders_chunk = orders[i: min(i + batch_size, len(orders))]
+            features_batch = [[] for _ in range(args.pre_len)]
+            observation_features_batch = [[] for _ in range(args.tar_len)]
+            data_batch = []
+            observation_data_batch = []
+            if 'graph' in args.file_head:
                 for k in range(args.pre_len):
-                    x, edge_index = use_cuda(features[id + k, :, :], args.edge_index, args.cuda)
-                    d = Data(x=x, edge_index=edge_index)
-                    features_batch[k].append(d)
-            for k in range(args.pre_len):
-                data_batch.append(Batch.from_data_list(features_batch[k]))
+                    for j, id in enumerate(orders_chunk):
+                        x = use_cuda(features[id + k, :, 0:-1], args.cuda)
+                        edge_index = use_cuda(args.edge_index, args.cuda)
+                        d = Data(x=x, edge_index=edge_index)
+                        features_batch[k].append(d)
 
-            yield data_batch, target_batch
-        else:
-            data_batch = torch.zeros(pre_len, args.batch_size, args.num_nodes, args.node_features)
+                for k in range(args.tar_len):
+                    for j, id in enumerate(orders_chunk):
+                        x = use_cuda(features[id + args.pre_len+k, :, 0:-1], args.cuda)
+                        edge_index = use_cuda(args.edge_index, args.cuda)
+                        d = Data(x=x, edge_index=edge_index)
+                        observation_features_batch[k].append(d)
+
+                for k in range(args.pre_len):
+                    data_batch.append(Batch.from_data_list(features_batch[k]))
+
+                for k in range(args.tar_len):
+                    observation_data_batch.append(Batch.from_data_list(observation_features_batch[k]))
+
+            target_batch = torch.zeros(args.tar_len+args.pre_len, len(orders_chunk), targets.shape[-1])
+            observation_target_batch = torch.zeros(args.tar_len, len(orders_chunk), 1)
+
+            adj_neb_batch = torch.zeros(args.pre_len, len(orders_chunk), 1, args.num_nodes)
+            observation_adj_neb_batch = torch.zeros(args.tar_len, len(orders_chunk), 1, args.num_nodes)
+
+            adj_batch = torch.zeros(args.pre_len, len(orders_chunk), 2).long()
+            observation_adj_batch = torch.zeros(args.tar_len, len(orders_chunk), 2).long()
+
             for j, id in enumerate(orders_chunk):
-                data_batch[0:args.pre_len, j, :, :] = features[id:id + args.pre_len, :, :]
+                feat_index = np.arange(id, id + args.pre_len)
+                target_index = np.arange(id, id+args.pre_len+args.tar_len)
+                observ_index = np.arange(id + args.pre_len, id + args.pre_len + args.tar_len)
 
-            yield use_cuda(data_batch, target_batch, args.cuda)
+                target_batch[:, j, :] = targets[target_index]
+                observation_target_batch[:, j, :] = targets[observ_index, :]
+
+                q_id = features[feat_index, 0, -1].long()
+                adj_batch[:, j, 0] = torch.tensor(j).long()
+                adj_batch[:, j, 1] = q_id
+                adj_neb_batch[:, j, 0, :] = args.adj[q_id[:], :]
+
+                q_id = features[observ_index, 0, -1].long()
+                observation_adj_batch[:, j, 0] = torch.tensor(j).long()
+                observation_adj_batch[:, j, 1] = q_id
+                observation_adj_neb_batch[:, j, 0, :] = args.adj[q_id[:], :]
+
+            yield data_batch, observation_data_batch, use_cuda(
+                adj_batch, args.cuda), use_cuda(observation_adj_batch, args.cuda), \
+                  use_cuda(target_batch, args.cuda), use_cuda(observation_target_batch, args.cuda)
+
+
+def data_loader(features, targets, batch_size, args):
+    """
+    :param features: a list of features_1q
+    :param targets: a list of targets_1q
+    :param batch_size:
+    :param args:
+    :return:
+    """
+    q_orders = torch.randperm(args.num_nodes)
+    for q in q_orders:
+        for out in data_loader_1q(features[q], targets[q], batch_size, args):
+            yield out
+
+
+def extend_features(features, targets, q_num, current_adj_feat=None):
+    """
+    This function is used to extend the log into and adj features
+    :param features: (len, feature_len)
+    :param targets: (len, target_len)
+    :param q_num: (numof queues)
+    :return: features_extend: (len adj_shape, feature)
+    """
+    data_len, feat_len = features.shape
+    features_extend = torch.zeros(data_len, q_num, feat_len+1)
+
+    if current_adj_feat is None:
+        current_adj_feat = torch.zeros(q_num, feat_len+1)
+
+    for i in range(data_len):
+        q_id = features[i, -1].long()
+        current_adj_feat[q_id, 0:-2] = features[i, 0:-1]
+        current_adj_feat[q_id, -2] = targets[i, 0]
+        current_adj_feat[:, -1] = q_id
+        features_extend[i] = current_adj_feat
+
+    return features_extend, current_adj_feat
+
+
+def features_resort(features, targets, q_num):
+    '''
+    This function is used to re-sort the features and targets according to the queue id and for each
+    queue, it is sorted by arrival time.
+    :param features:
+    :param targets:
+    :param q_num:
+    :return:
+    '''
+    features_q = [[] for _ in range(q_num)]
+    targets_q = [[] for _ in range(q_num)]
+    for i, (feat, target) in enumerate(zip(features, targets)):
+        q = int(feat.view(-1)[-1])
+        features_q[q].append(feat)
+        targets_q[q].append(target)
+    features = []
+    targets = []
+    for features_1q, targets_1q in zip(features_q, targets_q):
+        features.append(torch.stack(features_1q))
+        targets.append(torch.stack(targets_1q))
+
+    return features, targets
+
+
+
+def data_init(args):
+    adj, edge_index, features_train, features_val, features_test, \
+        targets_train, targets_val, targets_test = load_dataset(path="./simul_data")
+
+    if args.cuda:
+        adj = adj.cuda()
+        edge_index = edge_index.cuda()
+    if len(targets_train.shape) == 1:
+        targets_train = targets_train.unsqueeze(1)
+        targets_val = targets_val.unsqueeze(1)
+        targets_test = targets_test.unsqueeze(1)
+    print("featues_train shape: ", features_train.shape)
+    print("targets_train shape: ", targets_train.shape)
+    print("adj shape: ", adj.shape)
+
+    args.num_nodes = adj.shape[0]
+    args.node_features = features_train.shape[-1]
+    args.target_features = targets_train.shape[-1]
+
+    q_num = args.num_nodes
+    if 'graph' in args.file_head:
+        features_train, current_adj_feat = extend_features(features_train, targets_train, q_num)
+        features_val, current_adj_feat = extend_features(features_val, targets_val, q_num, current_adj_feat)
+        features_test, current_adj_feat = extend_features(features_test, targets_test, q_num, current_adj_feat)
+
+    features_train, targets_train = features_resort(features_train, targets_train, q_num)
+    features_val, targets_val = features_resort(features_val, targets_val, q_num)
+    features_test, targets_test = features_resort(features_test, targets_test, q_num)
+
+    return adj, edge_index, features_train, features_val, features_test, \
+           targets_train, targets_val, targets_test
+
+
+def debug(features_test, targets_test, args):
+    """debug"""
+    test_loader_debug = data_loader(features_test, targets_test, args.batch_size, args)
+    targets_test = []
+    for i, (data_batch, target_batch) in enumerate(test_loader_debug):
+        targets_test.extend(target_batch.view(-1))
+    visulization(targets_test, [])
+
 
 
 class AverageMeter(object):
@@ -257,31 +351,56 @@ class ProgressMeter(object):
         return '[' + fmt + '/' + fmt.format(num_batches) + ']'
 
 
-def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
-    torch.save(state, filename)
-    if is_best:
-        shutil.copyfile(filename, 'model_best.pth.tar')
+def resume_checkpoit(args, model, optimizer, resume=True):
+    path = os.path.join("./results", args.dataset)
+    if not os.path.exists(path):
+        os.system('mkdir ' + path)
+    args.filename = os.path.join(path, args.file_head) + args.loss + '.pth.tar'
+    if resume:
+        if os.path.isfile(args.filename):
+            print("=> loading checkpoint '{}'".format(args.filename))
+            checkpoint = torch.load(args.filename)
+            args.start_epoch = checkpoint['epoch']
+            model.load_state_dict(checkpoint['state_dict'])
+            optimizer.load_state_dict(checkpoint['optimizer'])
+            print("=> loaded checkpoint '{}' (epoch {})"
+                  .format(args.filename, checkpoint['epoch']))
+        else:
+            print("=> no checkpoint found at '{}'".format(args.filename))
 
 
 def rmse(y_pre, y_true):
     inputs = y_pre - y_true
-    return np.linalg.norm(inputs, ord=2)/math.sqrt(len(inputs))
+    return (torch.norm(inputs, p=2)/math.sqrt(inputs.shape[0])).item()
 
 
 def mae(y_pre, y_true):
     inputs = y_pre - y_true
-    return np.linalg.norm(inputs, ord=1)/len(inputs)
+    return (torch.norm(inputs, p=1)/inputs.shape[0]).item()
 
 
 def mare(y_pre, y_true):
-    inputs = []
-    for i,j in zip(y_pre, y_true):
-        if j != 0:
-            inputs.append((i-j)/j)
-        else:
-            inputs.append((i - 0) / 1)
-    return np.linalg.norm(inputs, ord=1)/len(inputs)
+    inputs = torch.abs(y_pre - y_true)
+    y_true[torch.where(y_true == 0)] = 1
+    inputs = inputs/torch.abs(y_true)
+    return (torch.sum(inputs)/inputs.shape[0]).item()
 
+
+def medae(y_pre, y_true):
+    inputs = torch.abs(y_pre - y_true)
+    return torch.median(inputs).item()
+
+
+def mad(y_pre, y_true):
+    inputs = y_pre-y_true
+    inputs = torch.abs(inputs - torch.median(inputs))
+    return torch.median(inputs).item()
+
+
+def R2(y_pre, y_true):
+    mu = torch.mean(y_true)
+    tmp = torch.pow(y_pre-y_true, 2).sum()/torch.pow(y_true-mu, 2).sum()
+    return 1-tmp.item()
 
 def accuracy(output, target):
     """Computes the accuracy over the k top predictions for the specified values of k"""
@@ -297,22 +416,9 @@ def accuracy(output, target):
     return 1-correct_k.mul_(1 / batch_size).squeeze()
 
 
-# def get_losses(target, prediction, method='rmse'):
-#     with torch.no_grad():
-#         if target.shape == prediction.shape:
-#             target = target.reshape(-1)
-#             prediction = prediction.reshape(-1)
-#             if method == 'rmse':
-#                 return rmse(prediction, target)
-#             elif method == 'mae':
-#                 return mae(prediction, target)
-#             elif method == 'mare':
-#                 return mare(prediction, target)
-#         else:
-#             return accuracy(prediction, target)
-
-
 def evaluation(target, prediction, method='rmse'):
+    target = target.view(-1, 1)
+    prediction = prediction.view(-1, 1)
     with torch.no_grad():
         if method == 'roc':
             fpr, tpr, thresholds = metrics.roc_curve(target, prediction, pos_label=2)
@@ -321,34 +427,51 @@ def evaluation(target, prediction, method='rmse'):
             return rmse(prediction, target)
         elif method == 'mae':
             return mae(prediction, target)
-        elif method == 'mare':
-            return mare(prediction, target)
+        elif method == 'medae':
+            return medae(prediction, target)
+        elif method == 'mad':
+            return mad(prediction, target)
+        elif method == 'R2':
+            return R2(prediction, target)
         elif method == 'accu':
             return accuracy(prediction, target)
 
 
-def visulization(target, prediction, path='./', ratio=0.2, show=False):
-    target_index = np.arange(1, len(target), int(1/ratio))
-    prediction_index = np.arange(1, len(prediction), int(1 / ratio))
-    data = {'target': np.array(target)[target_index], 'prediction': np.array(prediction)[prediction_index]}
+def visulization(target, prediction, path='./', ratio=0.001, show=False, title=None):
+    data = {'target': np.array(target), 'prediction': np.array(prediction)}
     with open(path+'.pkl', 'wb') as f:
         pickle.dump(data, f)
+    target_index = np.arange(1, len(target), int(1 / ratio))
+    prediction_index = np.arange(1, len(prediction), int(1 / ratio))
     if show:
         import matplotlib.pyplot as plt
         plt.plot(np.array(target)[target_index], 'r^-')
         plt.plot(np.array(prediction)[prediction_index], 'b')
         plt.savefig(path+'.png')
+        plt.title(title)
         plt.show()
 
 
+
+
 if __name__ == '__main__':
-    # path = './logs/train/GRU_train_epoch_20'
-    # with open(path+'.pkl', 'rb') as f:
-    #     data = pickle.load(f)
-    #
-    # import matplotlib.pyplot as plt
-    # plt.plot(data['target'], 'r^-')
-    # plt.plot(data['prediction'], 'b')
-    # plt.savefig(path+'.png')
-    # plt.show()
-    evaluation()
+    file_head = 'graph_VAE_GRU'
+    epoch = 5
+    path = './logs/train/'+file_head+'train_epoch_'+str(epoch)
+    with open(path+'.pkl', 'rb') as f:
+        data = pickle.load(f)
+
+    import matplotlib.pyplot as plt
+    plt.plot(data['target'], 'r^-')
+    plt.plot(data['prediction'], 'b')
+    plt.savefig(path+'.png')
+    plt.show()
+
+    path = './logs/val/'+file_head+'val_epoch_'+str(epoch)
+    with open(path+'.pkl', 'rb') as f:
+        data = pickle.load(f)
+
+    plt.plot(data['target'], 'r^-')
+    plt.plot(data['prediction'], 'b')
+    plt.savefig(path+'.png')
+    plt.show()

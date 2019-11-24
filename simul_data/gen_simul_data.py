@@ -216,7 +216,7 @@ def gene_queue(args):
         qn = graph2queue(adja_list, edge_list, args)
         file_head = 'weight_'+str(weight)+'_height_'+str(height)
     elif args.shape == 'pagerank':
-        g = qt.generate_pagerank_graph(300, seed=13)
+        g = qt.generate_pagerank_graph(40, seed=13)
         qn = qt.QueueNetwork(g, seed=14)
         file_head = 'pagerank'
     return qn, file_head
@@ -229,14 +229,14 @@ if __name__=='__main__':
     entry = (0, 1)
     args.weight = weight
     args.height = height
-    args.shape = 'tree'
+    args.shape = 'pagerank'
     qn, file_head = gene_queue(args)
 
     all_queues = qn.edge2queue
     # queue_show(qn, args)
-    data = queue_simu(qn, args, use_queue=True, n=100000)
+    data = queue_simu(qn, args, use_queue=True, n=500000)
 
-    data = simplfy_data(data, limit_num=100, use_queue=True)
+    data = simplfy_data(data, limit_num=0, use_queue=True)
     valid_queues = set(data[:, -1])
 
     print("length of valid queues: ", len(list(valid_queues)))
